@@ -46,3 +46,18 @@ Render::~Render()
 {
 	
 }
+
+void Render::DrawSpaceShip(SpaceShip * ship)
+{
+	auto connections = ship->get_connections();
+	auto points = ship->get_object();
+	for(auto &connection : connections)
+	{
+		int start = connection.first;
+		auto connected_points = connection.second;
+		for(auto &connected_point : connected_points)
+		{
+			DrawLine(points[start].x, points[start].y, connected_point.x, connected_point.y, 0, 0, 0);
+		}
+	}
+}

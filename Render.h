@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SDL.h>
+#include "SpaceShip.h"
 #undef main
 
 struct SDL_Window;
@@ -24,6 +25,7 @@ public:
 	void Clear() const;
 
 	~Render();
+	void DrawSpaceShip(SpaceShip*ship);
 private:
 	SDL_Window* _window{};
 	SDL_Renderer* _renderer{};

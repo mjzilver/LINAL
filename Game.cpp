@@ -3,6 +3,8 @@
 #include <iostream>
 
 #include <SDL.h>
+#include "Matrices.h"
+#include "SpaceShip.h"
 #undef main
 
 Game::Game()
@@ -17,7 +19,8 @@ Game::~Game()
 void Game::StartGameLoop()
 {
 	SDL_Event SDL_event;
-
+	SDL_Point startLocation{ 400,400 };
+	SpaceShip ship{ startLocation };
 
 	while (gameLoop)
 	{
@@ -41,11 +44,14 @@ void Game::StartGameLoop()
 		{
 			gameLoop = false;
 		}
+
+
 		
 
 		render.Clear();
 
-		render.DrawLine(10, 20, 40, 80);
+		render.DrawLine(10, 20, 40, 80,0,0,0);
+		render.DrawSpaceShip(&ship);
 
 		render.Draw();
 	}
