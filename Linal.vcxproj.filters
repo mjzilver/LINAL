@@ -30,13 +30,13 @@
     <ClCompile Include="Matrices.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Vector.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="WorldObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SpaceShip.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Point.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -53,13 +53,13 @@
     <ClInclude Include="Matrices.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Vector.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="WorldObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SpaceShip.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Point.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

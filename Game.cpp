@@ -19,7 +19,7 @@ Game::~Game()
 void Game::StartGameLoop()
 {
 	SDL_Event SDL_event;
-	SDL_Point startLocation{ 400,400 };
+	Point startLocation{ 400,400,10 };
 	SpaceShip ship{ startLocation };
 
 	while (gameLoop)
@@ -51,7 +51,7 @@ void Game::StartGameLoop()
 		render.Clear();
 
 		render.DrawLine(10, 20, 40, 80,0,0,0);
-		render.DrawSpaceShip(&ship);
+		render.DrawObject(&ship);
 
 		render.Draw();
 	}

@@ -47,9 +47,21 @@ Render::~Render()
 	
 }
 
-void Render::DrawSpaceShip(SpaceShip * ship)
+void Render::DrawObject(WorldObject * object)
 {
-	auto connections = ship->get_connections();
-	auto points = ship->get_object();
-	
+	auto connections = object->get_connections();
+	auto points = object->get_object();
+	for(auto &connection : connections)
+	{
+		auto start = connection.first;
+		if(start.draw())
+		{
+			auto connected_points = connection.second;
+			for (auto &connected_point : connected_points)
+			{
+				if (connected_point.draw())
+					DrawLine(start.getWorldX(), start.getWorldY(), connected_point.getWorldX(), connected_point.getWorldY(), 0, 0, 0);
+			}
+		}		
+	}
 }
