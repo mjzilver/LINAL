@@ -1,20 +1,20 @@
 #pragma once
 #include <vector>
-#include <SDL.h>
 #include <map>
+#include "Point.h"
 
 class WorldObject
 {
 public:
 	WorldObject();
 	~WorldObject();
-	std::vector<SDL_Point> get_object() { return _points; }
-	std::map<int,std::vector<SDL_Point>> get_connections() { return _connections; }
-	SDL_Point get_startingpoint() { return _startingPoint; }
+	std::vector<Point> get_object() { return _points; }
+	std::map<int,std::vector<Point>> get_connections() { return _connections; }
+	Point get_source() { return _source; }
 
 protected:
-	std::map<int, std::vector<SDL_Point>> _connections;
-	std::vector<SDL_Point> _points;
-	SDL_Point _startingPoint;
+	std::map<int, std::vector<Point>> _connections;
+	std::vector<Point> _points;
+	Point _source;
 };
 

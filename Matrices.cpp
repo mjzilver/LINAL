@@ -18,7 +18,7 @@ Matrix::~Matrix()
 {
 }
 
-void Matrix::setValues(std::vector<double> values)
+void Matrix::setValues(std::vector<int> values)
 {
 	int value = 0;
 	for (int i = 0; i < _rows; ++i) {
@@ -33,7 +33,7 @@ void Matrix::setValues(std::vector<double> values)
 Matrix Matrix::operator+(const Matrix & other)
 {
 	Matrix result(_rows,_columns);
-	std::vector<double> values;
+	std::vector<int> values;
 
 	for (int i = 0; i < _rows; i++) {
 		for (int j = 0; j < _columns; j++) {
@@ -58,7 +58,7 @@ Matrix & Matrix::operator+=(const Matrix & other)
 Matrix Matrix::operator-(const Matrix & other)
 {
 	Matrix result(_rows, _columns);
-	std::vector<double> values;
+	std::vector<int> values;
 
 	for (int i = 0; i < _rows; i++) {
 		for (int j = 0; j < _columns; j++) {
@@ -83,7 +83,7 @@ Matrix & Matrix::operator-=(const Matrix & other)
 Matrix Matrix::operator*(const Matrix & other)
 {
 	Matrix result(_rows, other.get_columns());
-	std::vector<double> values;
+	std::vector<int> values;
 
 	for (int i = 0; i < _rows; i++) {
 		for (int j = 0; j < _rows; j++) {

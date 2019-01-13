@@ -4,7 +4,7 @@ class SpaceShip :
 	public WorldObject
 {
 public:
-	SpaceShip(SDL_Point start);
+	SpaceShip(Point source);
 	~SpaceShip();
 };
 
