@@ -25,7 +25,7 @@ public:
 	void Clear() const;
 
 	~Render();
-	void DrawSpaceShip(SpaceShip*ship);
+	void DrawObject(WorldObject*object);
 private:
 	SDL_Window* _window{};
 	SDL_Renderer* _renderer{};

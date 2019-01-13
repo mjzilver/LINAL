@@ -2,8 +2,9 @@
 class Point
 {
 public:
-	Point(const int x, const int y, const int z) : _x{ x }, _y{ y }, _z{ z } {};
-	~Point();
+	Point(const int x, const int y, const int z) : _x{ x }, _y{ y }, _z{ z }, _worldX{ x }, _worldY{ y }, _w{1} {};
+	Point() {};
+	~Point(){};
 	int getX() const { return _x; }
 	int getY() const { return _y; }
 	int getZ() const { return _z; }
