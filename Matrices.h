@@ -26,14 +26,16 @@ public:
 	Matrix & operator*=(const Matrix & other);
 
 	Matrix translate(WorldObject object, int deltaX, int deltaY, int deltaZ);
+	Matrix translate(int deltaX, int deltaY, int deltaZ);
 	Matrix scale(WorldObject object, int scaleX, int scaleY, int scaleZ);
 	Matrix rotate(WorldObject object, Point rotationPoint, int degrees);
 
 	int dotProduct(Point vector1, Point vector2);
 	Matrix crossProduct(Point vector1, Point vector2);
+	
 private:
 	int _rows;
 	int _columns;
-	double matrix[4][4];
+	double matrix[4][10];
 };
 

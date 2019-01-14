@@ -20,7 +20,7 @@ void Game::StartGameLoop()
 {
 	SDL_Event SDL_event;
 	Point startLocation{ 400,400,10 };
-	SpaceShip ship{ startLocation };
+	SpaceShip ship { startLocation };
 
 	while (gameLoop)
 	{
@@ -54,5 +54,15 @@ void Game::StartGameLoop()
 		render.DrawObject(&ship);
 
 		render.Draw();
+
+		//translation check
+		/*Matrix shipPosition{ship};
+		shipPosition = shipPosition.translate(ship, 1, 0, 0);
+		for (int i = 0; i < shipPosition.get_columns(); i++)
+		{
+			ship.get_object()[i].setX(shipPosition.getValue(0, i));
+			ship.get_object()[i].setY(shipPosition.getValue(1, i));
+			ship.get_object()[i].setZ(shipPosition.getValue(2, i));
+		}*/
 	}
 }

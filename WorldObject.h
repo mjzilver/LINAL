@@ -9,11 +9,11 @@ public:
 	WorldObject();
 	~WorldObject();
 	std::vector<Point> get_object() { return _points; }
-	std::map<Point,std::vector<Point>> get_connections() { return _connections; }
+	std::map<int,std::vector<Point>> get_connections() { return _connections; }
 	Point get_source() { return _source; }
 
 protected:
-	std::map<Point, std::vector<Point>> _connections;
+	std::map<int, std::vector<Point>> _connections;
 	std::vector<Point> _points;
 	Point _source;
 };
