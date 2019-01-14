@@ -22,18 +22,18 @@ SpaceShip::SpaceShip(Point source)
 	_points.push_back(point7);
 	_points.push_back(point8);
 
-	_connections[1].push_back(point2);
-	_connections[1].push_back(point3);
-	_connections[1].push_back(point5);
-	_connections[4].push_back(point2);
-	_connections[4].push_back(point3);
-	_connections[4].push_back(point8);
-	_connections[6].push_back(point2);
-	_connections[6].push_back(point5);
-	_connections[6].push_back(point8);
-	_connections[7].push_back(point3);
-	_connections[7].push_back(point5);
-	_connections[7].push_back(point8);
+	_connections[1].push_back(&_points[2]);
+	_connections[1].push_back(&_points[3]);
+	_connections[1].push_back(&_points[5]);
+	_connections[4].push_back(&_points[2]);
+	_connections[4].push_back(&_points[3]);
+	_connections[4].push_back(&_points[8]);
+	_connections[6].push_back(&_points[2]);
+	_connections[6].push_back(&_points[5]);
+	_connections[6].push_back(&_points[8]);
+	_connections[7].push_back(&_points[3]);
+	_connections[7].push_back(&_points[5]);
+	_connections[7].push_back(&_points[8]);
 }
 
 SpaceShip::~SpaceShip()

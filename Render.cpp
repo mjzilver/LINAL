@@ -53,15 +53,15 @@ void Render::DrawObject(WorldObject * object)
 	auto points = object->get_object();
 	for(auto &connection : connections)
 	{
-		auto start = connection.first;
-		if(points[start].draw())
+		auto start = points->at(connection.first);
+		if(start.draw())
 		{
 			auto connected_points = connection.second;
 			for (auto &connected_point : connected_points)
 			{
-				if (connected_point.draw())
+				if (connected_point->draw())
 					//DrawLine(points[start].getWorldX(), points[start].getWorldY(), connected_point.getWorldX(), connected_point.getWorldY(), 0, 0, 0);
-					DrawLine(points[start].getX(), points[start].getY(), connected_point.getWorldX(), connected_point.getWorldY(), 0, 0, 0);
+					DrawLine(start.getX(), start.getY(), connected_point->getX(), connected_point->getY(), 0, 0, 0);
 			}
 		}
 	}

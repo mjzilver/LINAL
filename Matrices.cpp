@@ -16,12 +16,12 @@ Matrix::Matrix(int rows, int columns) : _rows{rows}, _columns{columns}
 Matrix::Matrix(WorldObject object)
 {
 	_rows = 4;
-	_columns = object.get_object().size();
+	_columns = object.get_object()->size();
 	auto points = object.get_object();
 	for (int i = 0; i < _columns; ++i) {
-		matrix[0][i] = points.at(i).getX();
-		matrix[1][i] = points.at(i).getY();
-		matrix[2][i] = points.at(i).getZ();
+		matrix[0][i] = points->at(i).getX();
+		matrix[1][i] = points->at(i).getY();
+		matrix[2][i] = points->at(i).getZ();
 		matrix[3][i] = 1;
 	}
 }
@@ -31,7 +31,7 @@ Matrix::~Matrix()
 {
 }
 
-void Matrix::setValues(std::vector<int> values)
+void Matrix::setValues(std::vector<double> values)
 {
 	int value = 0;
 	for (int i = 0; i < _rows; ++i) {
@@ -46,7 +46,7 @@ void Matrix::setValues(std::vector<int> values)
 Matrix Matrix::operator+(const Matrix & other)
 {
 	Matrix result(_rows,_columns);
-	std::vector<int> values;
+	std::vector<double> values;
 
 	for (int i = 0; i < _rows; i++) {
 		for (int j = 0; j < _columns; j++) {
@@ -71,7 +71,7 @@ Matrix & Matrix::operator+=(const Matrix & other)
 Matrix Matrix::operator-(const Matrix & other)
 {
 	Matrix result(_rows, _columns);
-	std::vector<int> values;
+	std::vector<double> values;
 
 	for (int i = 0; i < _rows; i++) {
 		for (int j = 0; j < _columns; j++) {
@@ -96,7 +96,7 @@ Matrix & Matrix::operator-=(const Matrix & other)
 Matrix Matrix::operator*(const Matrix & other)
 {
 	Matrix result(_rows, other.get_columns());
-	std::vector<int> values;
+	std::vector<double> values;
 
 	for (int i = 0; i < _rows; i++) {
 		for (int j = 0; j < other.get_columns(); j++) {
@@ -118,26 +118,26 @@ Matrix & Matrix::operator*=(const Matrix & other)
 	return *this;
 }
 
-Matrix Matrix::translate(WorldObject object, int deltaX, int deltaY, int deltaZ)
+Matrix Matrix::translate(WorldObject object, double deltaX, double deltaY, double deltaZ)
 {
 	Matrix translation{4,4};
 	Matrix objectMatrix{object};
-	translation.setValues(std::vector<int>{1, 0, 0, deltaX, 0, 1, 0, deltaY, 0, 0, 1, deltaZ, 0, 0, 0, 1});
+	translation.setValues(std::vector<double>{1, 0, 0, deltaX, 0, 1, 0, deltaY, 0, 0, 1, deltaZ, 0, 0, 0, 1});
 	return translation * objectMatrix;
 }
 
-Matrix Matrix::translate(int deltaX, int deltaY, int deltaZ)
+Matrix Matrix::translate(double deltaX, double deltaY, double deltaZ)
 {
 	Matrix translation{ 4,4 };
-	translation.setValues(std::vector<int>{1, 0, 0, deltaX, 0, 1, 0, deltaY, 0, 0, 1, deltaZ, 0, 0, 0, 1});
+	translation.setValues(std::vector<double>{1, 0, 0, deltaX, 0, 1, 0, deltaY, 0, 0, 1, deltaZ, 0, 0, 0, 1});
 	return translation;
 }
 
-Matrix Matrix::scale(WorldObject object, int scaleX, int scaleY, int scaleZ)
+Matrix Matrix::scale(WorldObject object, double scaleX, double scaleY, double scaleZ)
 {
 	Matrix scale{ 4,4 };
 	Matrix objectMatrix{object};
-	scale.setValues(std::vector<int>{scaleX, 0, 0, 0, 0, scaleY, 0, 0, 0, 0, scaleZ, 0, 0, 0, 0, 1});
+	scale.setValues(std::vector<double>{scaleX, 0, 0, 0, 0, scaleY, 0, 0, 0, 0, scaleZ, 0, 0, 0, 0, 1});
 	Matrix toSource = translate(-object.get_source().getX(), -object.get_source().getY(), -object.get_source().getZ());
 	Matrix backToPosition = translate(object.get_source().getX(), object.get_source().getY(), object.get_source().getZ());
 	return backToPosition * scale * toSource * objectMatrix;
@@ -152,45 +152,45 @@ Matrix Matrix::rotate(WorldObject object, Point rotationPoint, int degrees)
 	Matrix M4{ 4,4 };
 	Matrix M5{ 4,4 };
 	//x delen door wortel van x2 + y2
-	int rotateXY1 = (int)rotationPoint.getX() / std::sqrt(std::pow((double)rotationPoint.getX(), 2) + std::pow((double)rotationPoint.getY(), 2));
+	double rotateXY1 = rotationPoint.getX() / std::sqrt(std::pow((double)rotationPoint.getX(), 2) + std::pow((double)rotationPoint.getY(), 2));
 	//z delen door wortel van x2 + y2
-	int rotateXY2 = (int)rotationPoint.getZ() / std::sqrt(std::pow((double)rotationPoint.getX(), 2) + std::pow((double)rotationPoint.getY(), 2));
+	double rotateXY2 = rotationPoint.getZ() / std::sqrt(std::pow((double)rotationPoint.getX(), 2) + std::pow((double)rotationPoint.getY(), 2));
 	//y delen door wortel van x2 + y2 + z2
-	int rotateToX1 = (int)rotationPoint.getY() / std::sqrt(std::pow((double)rotationPoint.getX(), 2) + std::pow((double)rotationPoint.getY(), 2) + std::pow((double)rotationPoint.getZ(), 2));
+	double rotateToX1 = rotationPoint.getY() / std::sqrt(std::pow((double)rotationPoint.getX(), 2) + std::pow((double)rotationPoint.getY(), 2) + std::pow((double)rotationPoint.getZ(), 2));
 	//wortel van x2 + z2 delen door wortel van x2 + y2 + z2
-	int rotateToX2 = std::sqrt(std::pow((double)rotationPoint.getX(), 2) + std::pow((double)rotationPoint.getZ(), 2)) / std::sqrt(std::pow((double)rotationPoint.getX(), 2) + std::pow((double)rotationPoint.getY(), 2) + std::pow((double)rotationPoint.getZ(), 2));
+	double rotateToX2 = std::sqrt(std::pow((double)rotationPoint.getX(), 2) + std::pow((double)rotationPoint.getZ(), 2)) / std::sqrt(std::pow((double)rotationPoint.getX(), 2) + std::pow((double)rotationPoint.getY(), 2) + std::pow((double)rotationPoint.getZ(), 2));
 
 
 	//
-	M5.setValues(std::vector<int>{
+	M5.setValues(std::vector<double>{
 		rotateXY1, 0, -rotateXY2, 0,
 			0, 1, 0, 0,
 			rotateXY2, 0, rotateXY1, 0,
 			0, 0, 0, 1
 	});
 	//
-	M4.setValues(std::vector<int>{
+	M4.setValues(std::vector<double>{
 		rotateToX2, -rotateToX1, 0, 0,
 			rotateToX1, rotateToX2, 0, 0,
 			0, 0, 1, 0,
 			0, 0, 0, 1
 	});
 	//
-	M3.setValues(std::vector<int>{
+	M3.setValues(std::vector<double>{
 		1, 0, 0, 0,
-			0, (int)cos(degrees * PI / 180), -(int)sin(degrees * PI / 180), 0,
-			0, (int)sin(degrees * PI / 180), (int)cos(degrees * PI / 180), 0,
+			0, cos(degrees * PI / 180), -sin(degrees * PI / 180), 0,
+			0, sin(degrees * PI / 180), cos(degrees * PI / 180), 0,
 			0, 0, 0, 1
 	});
 	//
-	M2.setValues(std::vector<int>{
+	M2.setValues(std::vector<double>{
 		rotateToX2, rotateToX1, 0, 0,
 			-rotateToX1, rotateToX2, 0, 0,
 			0, 0, 1, 0,
 			0, 0, 0, 1
 	});
 	//
-	M1.setValues(std::vector<int>{
+	M1.setValues(std::vector<double>{
 		rotateXY1, 0, rotateXY2, 0,
 			0, 1, 0, 0,
 			-rotateXY2, 0, rotateXY1, 0,

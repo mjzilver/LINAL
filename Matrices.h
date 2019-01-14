@@ -1,7 +1,6 @@
 #pragma once
 #include <vector>
 #include "Point.h"
-#include <complex>
 #include "WorldObject.h"
 #define PI 3.14159265
 
@@ -11,7 +10,7 @@ public:
 	Matrix(int rows, int columns);
 	Matrix(WorldObject object);
 	~Matrix();
-	void setValues(std::vector<int> values);
+	void setValues(std::vector<double> values);
 	double getValue(const int row, const int column) { return matrix[row][column]; }
 	bool canMultiply(Matrix other) { return this->get_columns() == other.get_rows(); }
 
@@ -25,9 +24,9 @@ public:
 	Matrix  operator*(const Matrix & other);
 	Matrix & operator*=(const Matrix & other);
 
-	Matrix translate(WorldObject object, int deltaX, int deltaY, int deltaZ);
-	Matrix translate(int deltaX, int deltaY, int deltaZ);
-	Matrix scale(WorldObject object, int scaleX, int scaleY, int scaleZ);
+	Matrix translate(WorldObject object, double deltaX, double deltaY, double deltaZ);
+	Matrix translate(double deltaX, double deltaY, double deltaZ);
+	Matrix scale(WorldObject object, double scaleX, double scaleY, double scaleZ);
 	Matrix rotate(WorldObject object, Point rotationPoint, int degrees);
 
 	int dotProduct(Point vector1, Point vector2);

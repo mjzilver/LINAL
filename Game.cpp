@@ -21,6 +21,9 @@ void Game::StartGameLoop()
 	SDL_Event SDL_event;
 	Point startLocation{ 400,400,10 };
 	SpaceShip ship { startLocation };
+	SpaceShip ship2{ startLocation };
+	SpaceShip ship3{ startLocation };
+	bool scaled = false;
 
 	while (gameLoop)
 	{
@@ -52,17 +55,39 @@ void Game::StartGameLoop()
 
 		render.DrawLine(10, 20, 40, 80,0,0,0);
 		render.DrawObject(&ship);
+		render.DrawObject(&ship2);
+		render.DrawObject(&ship3);
 
 		render.Draw();
+		Matrix shipPosition{ ship };
+		Matrix shipPosition2{ ship2 };
 
-		//translation check
-		/*Matrix shipPosition{ship};
-		shipPosition = shipPosition.translate(ship, 1, 0, 0);
+		if(!scaled)
+		{
+			//shipPosition = shipPosition.scale(ship, 2, 2, 1);
+			shipPosition = shipPosition.rotate(ship, ship.get_source(), 10);
+			for (int i = 0; i < shipPosition.get_columns(); i++)
+			{
+				ship.get_object()->at(i).setX(shipPosition.getValue(0, i));
+				ship.get_object()->at(i).setY(shipPosition.getValue(1, i));
+				ship.get_object()->at(i).setZ(shipPosition.getValue(2, i));
+			}
+			shipPosition2 = shipPosition2.rotate(ship2, ship2.get_source(), 90);
+			for (int i = 0; i < shipPosition.get_columns(); i++)
+			{
+				ship2.get_object()->at(i).setX(shipPosition2.getValue(0, i));
+				ship2.get_object()->at(i).setY(shipPosition2.getValue(1, i));
+				ship2.get_object()->at(i).setZ(shipPosition2.getValue(2, i));
+			}
+			scaled = true;
+		}
+
+		/*shipPosition = shipPosition.translate(ship, 1, 1, 0);
 		for (int i = 0; i < shipPosition.get_columns(); i++)
 		{
-			ship.get_object()[i].setX(shipPosition.getValue(0, i));
-			ship.get_object()[i].setY(shipPosition.getValue(1, i));
-			ship.get_object()[i].setZ(shipPosition.getValue(2, i));
+			ship.get_object()->at(i).setX(shipPosition.getValue(0, i));
+			ship.get_object()->at(i).setY(shipPosition.getValue(1, i));
+			ship.get_object()->at(i).setZ(shipPosition.getValue(2, i));
 		}*/
 	}
 }
