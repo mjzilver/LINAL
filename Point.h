@@ -8,6 +8,9 @@ public:
 	int getX() const { return _x; }
 	int getY() const { return _y; }
 	int getZ() const { return _z; }
+	void setX(const int x) { _x = x; }
+	void setY(const int y) { _y = y; }
+	void setZ(const int z) { _z = z; }
 
 	int getWorldX() const { return _worldX; }
 	int getWorldY() const { return _worldY; }

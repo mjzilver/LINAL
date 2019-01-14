@@ -1,5 +1,8 @@
 #pragma once
 #include <vector>
+#include "Point.h"
+#include <complex>
+#define PI 3.14159265
 
 class Matrix
 {
@@ -19,25 +22,16 @@ public:
 	Matrix & operator-=(const Matrix & other);
 	Matrix  operator*(const Matrix & other);
 	Matrix & operator*=(const Matrix & other);
+
+	Matrix translate(Point vector, int deltaX, int deltaY, int deltaZ);
+	Matrix scale(Point vector, int scaleX, int scaleY, int scaleZ);
+	Matrix rotate(Point vector, Point rotationPoint, int degrees);
+
+	int dotProduct(Point vector1, Point vector2);
+	Matrix crossProduct(Point vector1, Point vector2);
 private:
 	int _rows;
 	int _columns;
 	double matrix[4][4];
-};
-
-struct TranslationMatrix : public Matrix
-{
-	TranslationMatrix(int deltaX, int deltaY, int deltaZ) : Matrix{4, 4}
-	{
-		setValues(std::vector<int>{1, 0, 0, deltaX, 0, 1, 0, deltaY, 0, 0, 1, deltaZ, 0, 0, 0, 1});
-	}
-};
-
-struct ScalingMatrix : public Matrix
-{
-	ScalingMatrix(int scaleX, int scaleY, int scaleZ) : Matrix{ 4, 4 }
-	{
-		setValues(std::vector<int>{scaleX,0,0,0,0,scaleY,0,0,0,0,scaleZ,0,0,0,0,1});
-	}
 };
 
