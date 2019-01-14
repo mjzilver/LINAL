@@ -1,5 +1,5 @@
 #include "Matrices.h"
-
+#include "WorldObject.h"
 
 
 Matrix::Matrix(int rows, int columns) : _rows{rows}, _columns{columns}
@@ -10,6 +10,19 @@ Matrix::Matrix(int rows, int columns) : _rows{rows}, _columns{columns}
 			matrix[i][j] = 0;
 			value++;
 		}
+	}
+}
+
+Matrix::Matrix(WorldObject object)
+{
+	_rows = 4;
+	_columns = object.get_object().size();
+	auto points = object.get_object();
+	for (int i = 0; i < _columns; ++i) {
+		matrix[0][i] = points.at(i).getX();
+		matrix[1][i] = points.at(i).getY();
+		matrix[2][i] = points.at(i).getZ();
+		matrix[3][i] = 1;
 	}
 }
 
@@ -105,29 +118,25 @@ Matrix & Matrix::operator*=(const Matrix & other)
 	return *this;
 }
 
-Matrix Matrix::translate(Point vector, int deltaX, int deltaY, int deltaZ)
+Matrix Matrix::translate(WorldObject object, int deltaX, int deltaY, int deltaZ)
 {
 	Matrix translation{4,4};
-	Matrix vectorMatrix{ 4,1 };
-	translation.setValues(std::vector<int>{1, 0, 0, deltaX, 0, 1, 0, deltaY, 0, 0, 1, deltaZ, 0, 0, 0, 1});	
-	vectorMatrix.setValues(std::vector<int>{vector.getX(),vector.getY(),vector.getZ(),1});
-	return translation * vectorMatrix;
+	Matrix objectMatrix{object};
+	translation.setValues(std::vector<int>{1, 0, 0, deltaX, 0, 1, 0, deltaY, 0, 0, 1, deltaZ, 0, 0, 0, 1});
+	return translation * objectMatrix;
 }
 
-Matrix Matrix::scale(Point vector, int scaleX, int scaleY, int scaleZ)
+Matrix Matrix::scale(WorldObject object, int scaleX, int scaleY, int scaleZ)
 {
 	Matrix scale{ 4,4 };
-	Matrix vectorMatrix{ 4,1 };
+	Matrix objectMatrix{object};
 	scale.setValues(std::vector<int>{scaleX, 0, 0, 0, 0, scaleY, 0, 0, 0, 0, scaleZ, 0, 0, 0, 0, 1});
-	vectorMatrix.setValues(std::vector<int>{vector.getX(), vector.getY(), vector.getZ(), 1});
-	return scale * vectorMatrix;
+	return scale * objectMatrix;
 }
 
-Matrix Matrix::rotate(Point vector, Point rotationPoint, int degrees)
+Matrix Matrix::rotate(WorldObject object, Point rotationPoint, int degrees)
 {
-	Matrix vectorMatrix{ 4,1 };
-	vectorMatrix.setValues(std::vector<int>{vector.getX(), vector.getY(), vector.getZ(), 1});
-
+	Matrix objectMatrix{ object };
 	Matrix M1{ 4,4 };
 	Matrix M2{ 4,4 };
 	Matrix M3{ 4,4 };
@@ -179,7 +188,7 @@ Matrix Matrix::rotate(Point vector, Point rotationPoint, int degrees)
 			0, 0, 0, 1
 	});
 
-	return M5 * M4*M3*M2*M1*vectorMatrix;
+	return M5 * M4*M3*M2*M1*objectMatrix;
 }
 
 int Matrix::dotProduct(Point vector1, Point vector2)
