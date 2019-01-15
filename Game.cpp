@@ -68,6 +68,19 @@ void Game::StartGameLoop()
 		{
 			shipPosition = shipPosition.translate(ship, 0.1, 0, 0);
 		}
+		if (input.isKeyHeld(SDL_SCANCODE_LALT))
+		{
+			shipPosition = shipPosition.translate(ship, -0.1, 0, 0);
+		}
+
+		if (input.isKeyHeld(SDL_SCANCODE_A))
+		{
+			shipPosition = shipPosition.translate(ship, 0, -0.1, 0);
+		}
+		if (input.isKeyHeld(SDL_SCANCODE_D))
+		{
+			shipPosition = shipPosition.translate(ship, 0, 0.1, 0);
+		}
 
 		if (input.isKeyHeld(SDL_SCANCODE_Q))
 		{
@@ -119,15 +132,19 @@ void Game::StartGameLoop()
 		}
 
 		// collision
-		Point shipCenter = ship.get_object()->at(0);
-		Point planetCenter = planet.get_object()->at(0);
-		if ((abs(shipCenter.getX() - planetCenter.getX()) < 50)
-			&& (abs(shipCenter.getY() - planetCenter.getY()) < 50)
-			&& (abs(shipCenter.getZ() - planetCenter.getZ()) < 50))
+		for (int i = 0; i < shipPosition.get_columns(); i++)
 		{
-			std::cout << "COLLISION!!!!" << std::endl;
+			Point shipPoint = ship.get_object()->at(i);
+			for (int j = 0; j < planetPosition.get_columns(); j++)
+			{
+				Point planetPoint = planet.get_object()->at(j);
+				if ((abs(shipPoint.getX() - planetPoint.getX()) < 25)
+					&& (abs(shipPoint.getY() - planetPoint.getY()) < 25)
+					&& (abs(shipPoint.getZ() - planetPoint.getZ()) < 25))
+				{
+					std::cout << "COLLISION!!!!" << std::endl;
+				}
+			}
 		}
-
-
 	}
 }
