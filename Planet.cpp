@@ -5,14 +5,14 @@ Planet::Planet(Point start)
 {
 	_source = start;
 	_points.push_back(_source);
-	Point point1{ _source.getX() - 25,_source.getY() - 25,_source.getZ() };
-	Point point2{ _source.getX() - 25,_source.getY() - 25,_source.getZ() - 50 };
-	Point point3{ _source.getX() - 25,_source.getY() + 25,_source.getZ() };
-	Point point4{ _source.getX() - 25,_source.getY() + 25,_source.getZ() - 50 };
-	Point point5{ _source.getX() + 25,_source.getY() - 25,_source.getZ() };
-	Point point6{ _source.getX() + 25,_source.getY() - 25,_source.getZ() - 50 };
-	Point point7{ _source.getX() + 25,_source.getY() + 25,_source.getZ() };
-	Point point8{ _source.getX() + 25,_source.getY() + 25,_source.getZ() - 50 };
+	Point point1{ _source.getX() - 50,_source.getY() - 50,_source.getZ() };
+	Point point2{ _source.getX() - 50,_source.getY() - 50,_source.getZ() - 50 };
+	Point point3{ _source.getX() - 50,_source.getY() + 50,_source.getZ() };
+	Point point4{ _source.getX() - 50,_source.getY() + 50,_source.getZ() - 50 };
+	Point point5{ _source.getX() + 50,_source.getY() - 50,_source.getZ() };
+	Point point6{ _source.getX() + 50,_source.getY() - 50,_source.getZ() - 50 };
+	Point point7{ _source.getX() + 50,_source.getY() + 50,_source.getZ() };
+	Point point8{ _source.getX() + 50,_source.getY() + 50,_source.getZ() - 50 };
 
 	_points.push_back(point1);
 	_points.push_back(point2);

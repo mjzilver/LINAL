@@ -84,7 +84,7 @@ void Game::StartGameLoop()
 				ship2.get_object()->at(i).setZ(shipPosition2.getValue(2, i));
 			}
 
-			planetPosition = planetPosition.rotate(planet, planet.get_source(), 90);
+			planetPosition = planetPosition.rotate(planet, planet.get_source(), 130);
 			for (int i = 0; i < planetPosition.get_columns(); i++)
 			{
 				planet.get_object()->at(i).setX(planetPosition.getValue(0, i));
@@ -96,17 +96,16 @@ void Game::StartGameLoop()
 
 		if (planetincrease)
 		{
-			if (planetpulse >= 1.01)
+			if (planetpulse >= 1.005)
 				planetincrease = false;
-			planetpulse += 0.0001;
+			planetpulse += 0.00005;
 		}
 		else
 		{
-			if (planetpulse <= 0.99)
+			if (planetpulse <= 0.995)
 				planetincrease = true;
-			planetpulse -= 0.0001;
+			planetpulse -= 0.00005;
 		}
-		std::cout << planetpulse << std::endl;
 		planetPosition = planetPosition.scale(planet, planetpulse, planetpulse, planetpulse);
 		for (int i = 0; i < planetPosition.get_columns(); i++)
 		{

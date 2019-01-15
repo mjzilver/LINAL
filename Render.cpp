@@ -37,8 +37,8 @@ void Render::Draw() const {
 }
 
 void Render::Clear() const {
-	///237,229,210 gebroken wit
-	SDL_SetRenderDrawColor(this->_renderer, 237, 229, 210, 0);
+	// Black background
+	SDL_SetRenderDrawColor(this->_renderer, 0, 0, 0, 0);
 	SDL_RenderClear(this->_renderer);
 }
 
@@ -61,7 +61,7 @@ void Render::DrawObject(WorldObject * object)
 			{
 				if (connected_point->draw())
 					//DrawLine(points[start].getWorldX(), points[start].getWorldY(), connected_point.getWorldX(), connected_point.getWorldY(), 0, 0, 0);
-					DrawLine(start.getX(), start.getY(), connected_point->getX(), connected_point->getY(), 0, 0, 0);
+					DrawLine(start.getX(), start.getY(), connected_point->getX(), connected_point->getY());
 			}
 		}
 	}
