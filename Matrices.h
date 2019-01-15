@@ -35,6 +35,6 @@ public:
 private:
 	int _rows;
 	int _columns;
-	double matrix[4][10];
+	double matrix[4][25];
 };
 

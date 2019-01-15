@@ -151,10 +151,11 @@ Matrix Matrix::rotate(WorldObject object, Point rotationPoint, int degrees)
 	Matrix M3{ 4,4 };
 	Matrix M4{ 4,4 };
 	Matrix M5{ 4,4 };
+	double radian = degrees * PI / 180.0;
 	//x delen door wortel van x2 + y2
-	double rotateXY1 = rotationPoint.getX() / std::sqrt(std::pow((double)rotationPoint.getX(), 2) + std::pow((double)rotationPoint.getY(), 2));
+	double rotateXY1 = rotationPoint.getX() / std::sqrt(std::pow((double)rotationPoint.getX(), 2) + std::pow((double)rotationPoint.getZ(), 2));
 	//z delen door wortel van x2 + y2
-	double rotateXY2 = rotationPoint.getZ() / std::sqrt(std::pow((double)rotationPoint.getX(), 2) + std::pow((double)rotationPoint.getY(), 2));
+	double rotateXY2 = rotationPoint.getZ() / std::sqrt(std::pow((double)rotationPoint.getX(), 2) + std::pow((double)rotationPoint.getZ(), 2));
 	//y delen door wortel van x2 + y2 + z2
 	double rotateToX1 = rotationPoint.getY() / std::sqrt(std::pow((double)rotationPoint.getX(), 2) + std::pow((double)rotationPoint.getY(), 2) + std::pow((double)rotationPoint.getZ(), 2));
 	//wortel van x2 + z2 delen door wortel van x2 + y2 + z2
@@ -178,8 +179,8 @@ Matrix Matrix::rotate(WorldObject object, Point rotationPoint, int degrees)
 	//
 	M3.setValues(std::vector<double>{
 		1, 0, 0, 0,
-			0, cos(degrees * PI / 180), -sin(degrees * PI / 180), 0,
-			0, sin(degrees * PI / 180), cos(degrees * PI / 180), 0,
+			0, cos(radian), -sin(radian), 0,
+			0, sin(radian), cos(radian), 0,
 			0, 0, 0, 1
 	});
 	//
@@ -196,8 +197,7 @@ Matrix Matrix::rotate(WorldObject object, Point rotationPoint, int degrees)
 			-rotateXY2, 0, rotateXY1, 0,
 			0, 0, 0, 1
 	});
-
-	return M5 * M4*M3*M2*M1*objectMatrix;
+	return M5 * M4 * M3 * M2 * M1 * objectMatrix;
 }
 
 int Matrix::dotProduct(Point vector1, Point vector2)

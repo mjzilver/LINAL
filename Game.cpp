@@ -22,11 +22,10 @@ void Game::StartGameLoop()
 	SDL_Event SDL_event;
 	Point startLocation{ 400,400,10 };
 	SpaceShip ship { startLocation };
-	SpaceShip ship2{ startLocation };
-	SpaceShip ship3{ startLocation };
 	Point planetLocation{ 800, 200, 300 };
 	Planet planet{ planetLocation };
 	double planetpulse = 1;
+	int ticks = 0;
 	bool planetincrease = true;
 
 	bool scaled = false;
@@ -57,61 +56,66 @@ void Game::StartGameLoop()
 		render.Clear();
 
 		render.DrawObject(&ship);
-		render.DrawObject(&ship2);
-		render.DrawObject(&ship3);
 		render.DrawObject(&planet);
 
 		render.Draw();
 		Matrix shipPosition{ ship };
-		Matrix shipPosition2{ ship2 };
 		Matrix planetPosition{ planet };
 
-		if(!scaled)
+		ticks++;
+
+		if(input.isKeyHeld(SDL_SCANCODE_LSHIFT))
 		{
-			//shipPosition = shipPosition.scale(ship, 2, 2, 1);
-			shipPosition = shipPosition.rotate(ship, ship.get_source(), 10);
+			shipPosition = shipPosition.translate(ship, 0.1, 0, 0);
+		}
+
+		if (input.isKeyHeld(SDL_SCANCODE_Q))
+		{
+			shipPosition = shipPosition.rotate(ship, ship.get_object()->at(0), 1);
 			for (int i = 0; i < shipPosition.get_columns(); i++)
 			{
 				ship.get_object()->at(i).setX(shipPosition.getValue(0, i));
 				ship.get_object()->at(i).setY(shipPosition.getValue(1, i));
 				ship.get_object()->at(i).setZ(shipPosition.getValue(2, i));
 			}
-			shipPosition2 = shipPosition2.rotate(ship2, ship2.get_source(), 90);
+		}
+
+		if (input.isKeyHeld(SDL_SCANCODE_E))
+		{
+			shipPosition = shipPosition.rotate(ship, ship.get_object()->at(0), -1);
 			for (int i = 0; i < shipPosition.get_columns(); i++)
 			{
-				ship2.get_object()->at(i).setX(shipPosition2.getValue(0, i));
-				ship2.get_object()->at(i).setY(shipPosition2.getValue(1, i));
-				ship2.get_object()->at(i).setZ(shipPosition2.getValue(2, i));
+				ship.get_object()->at(i).setX(shipPosition.getValue(0, i));
+				ship.get_object()->at(i).setY(shipPosition.getValue(1, i));
+				ship.get_object()->at(i).setZ(shipPosition.getValue(2, i));
 			}
-
-			planetPosition = planetPosition.rotate(planet, planet.get_source(), 130);
-			for (int i = 0; i < planetPosition.get_columns(); i++)
-			{
-				planet.get_object()->at(i).setX(planetPosition.getValue(0, i));
-				planet.get_object()->at(i).setY(planetPosition.getValue(1, i));
-				planet.get_object()->at(i).setZ(planetPosition.getValue(2, i));
-			}
-			scaled = true;
 		}
 
 		if (planetincrease)
 		{
-			if (planetpulse >= 1.005)
+			if (ticks % 200 == 0)
 				planetincrease = false;
-			planetpulse += 0.00005;
+			planetpulse = 1.0005;
 		}
 		else
 		{
-			if (planetpulse <= 0.995)
-				planetincrease = true;
-			planetpulse -= 0.00005;
+			if (ticks % 200 == 0)
+				planetincrease = true;			
+			planetpulse = 0.9995;
 		}
+		
 		planetPosition = planetPosition.scale(planet, planetpulse, planetpulse, planetpulse);
 		for (int i = 0; i < planetPosition.get_columns(); i++)
 		{
 			planet.get_object()->at(i).setX(planetPosition.getValue(0, i));
 			planet.get_object()->at(i).setY(planetPosition.getValue(1, i));
 			planet.get_object()->at(i).setZ(planetPosition.getValue(2, i));
+		}
+		for (int i = 0; i < shipPosition.get_columns(); i++)
+		{
+			ship.get_object()->at(i).setX(shipPosition.getValue(0, i));
+			ship.get_object()->at(i).setY(shipPosition.getValue(1, i));
+			ship.get_object()->at(i).setZ(shipPosition.getValue(2, i));
 		}
 	}
 }
