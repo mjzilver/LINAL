@@ -57,7 +57,7 @@ void Game::StartGameLoop()
 
 		render.DrawObject(&ship);
 		render.DrawObject(&planet);
-
+		render.DrawLine(0, 0, ship.get_object()->at(0).getX(), ship.get_object()->at(0).getY());
 		render.Draw();
 		Matrix shipPosition{ ship };
 		Matrix planetPosition{ planet };

@@ -197,6 +197,8 @@ Matrix Matrix::rotate(WorldObject object, Point rotationPoint, int degrees)
 			-rotateXY2, 0, rotateXY1, 0,
 			0, 0, 0, 1
 	});
+	//Matrix toSource{ translate(-rotationPoint.getX(), -rotationPoint.getY(), 0) };
+	//Matrix backToPosition{ translate(rotationPoint.getX(), rotationPoint.getY(), 0) };
 	return M5 * M4 * M3 * M2 * M1 * objectMatrix;
 }
 
