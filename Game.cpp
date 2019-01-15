@@ -5,6 +5,7 @@
 #include <SDL.h>
 #include "Matrices.h"
 #include "SpaceShip.h"
+#include "Planet.h"
 #undef main
 
 Game::Game()
@@ -23,6 +24,11 @@ void Game::StartGameLoop()
 	SpaceShip ship { startLocation };
 	SpaceShip ship2{ startLocation };
 	SpaceShip ship3{ startLocation };
+	Point planetLocation{ 800, 200, 300 };
+	Planet planet{ planetLocation };
+	double planetpulse = 1;
+	bool planetincrease = true;
+
 	bool scaled = false;
 
 	while (gameLoop)
@@ -48,19 +54,17 @@ void Game::StartGameLoop()
 			gameLoop = false;
 		}
 
-
-		
-
 		render.Clear();
 
-		render.DrawLine(10, 20, 40, 80,0,0,0);
 		render.DrawObject(&ship);
 		render.DrawObject(&ship2);
 		render.DrawObject(&ship3);
+		render.DrawObject(&planet);
 
 		render.Draw();
 		Matrix shipPosition{ ship };
 		Matrix shipPosition2{ ship2 };
+		Matrix planetPosition{ planet };
 
 		if(!scaled)
 		{
@@ -79,15 +83,36 @@ void Game::StartGameLoop()
 				ship2.get_object()->at(i).setY(shipPosition2.getValue(1, i));
 				ship2.get_object()->at(i).setZ(shipPosition2.getValue(2, i));
 			}
+
+			planetPosition = planetPosition.rotate(planet, planet.get_source(), 90);
+			for (int i = 0; i < planetPosition.get_columns(); i++)
+			{
+				planet.get_object()->at(i).setX(planetPosition.getValue(0, i));
+				planet.get_object()->at(i).setY(planetPosition.getValue(1, i));
+				planet.get_object()->at(i).setZ(planetPosition.getValue(2, i));
+			}
 			scaled = true;
 		}
 
-		/*shipPosition = shipPosition.translate(ship, 1, 1, 0);
-		for (int i = 0; i < shipPosition.get_columns(); i++)
+		if (planetincrease)
 		{
-			ship.get_object()->at(i).setX(shipPosition.getValue(0, i));
-			ship.get_object()->at(i).setY(shipPosition.getValue(1, i));
-			ship.get_object()->at(i).setZ(shipPosition.getValue(2, i));
-		}*/
+			if (planetpulse >= 1)
+				planetincrease = false;
+			planetpulse += 0.001;
+		}
+		else
+		{
+			if (planetpulse <= -1)
+				planetincrease = true;
+			planetpulse -= 0.001;
+		}
+		std::cout << planetpulse << std::endl;
+		planetPosition = planetPosition.scale(planet, planetpulse, planetpulse, planetpulse);
+		for (int i = 0; i < planetPosition.get_columns(); i++)
+		{
+			planet.get_object()->at(i).setX(planetPosition.getValue(0, i));
+			planet.get_object()->at(i).setY(planetPosition.getValue(1, i));
+			planet.get_object()->at(i).setZ(planetPosition.getValue(2, i));
+		}
 	}
 }
