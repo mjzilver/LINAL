@@ -96,15 +96,15 @@ void Game::StartGameLoop()
 
 		if (planetincrease)
 		{
-			if (planetpulse >= 1)
+			if (planetpulse >= 1.01)
 				planetincrease = false;
-			planetpulse += 0.001;
+			planetpulse += 0.0001;
 		}
 		else
 		{
-			if (planetpulse <= -1)
+			if (planetpulse <= 0.99)
 				planetincrease = true;
-			planetpulse -= 0.001;
+			planetpulse -= 0.0001;
 		}
 		std::cout << planetpulse << std::endl;
 		planetPosition = planetPosition.scale(planet, planetpulse, planetpulse, planetpulse);
