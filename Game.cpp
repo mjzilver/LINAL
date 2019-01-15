@@ -22,7 +22,7 @@ void Game::StartGameLoop()
 	SDL_Event SDL_event;
 	Point startLocation{ 400,400,10 };
 	SpaceShip ship { startLocation };
-	Point planetLocation{ 800, 200, 300 };
+	Point planetLocation{ 800, 400, 10 };
 	Planet planet{ planetLocation };
 	double planetpulse = 1;
 	int ticks = 0;
@@ -117,5 +117,17 @@ void Game::StartGameLoop()
 			ship.get_object()->at(i).setY(shipPosition.getValue(1, i));
 			ship.get_object()->at(i).setZ(shipPosition.getValue(2, i));
 		}
+
+		// collision
+		Point shipCenter = ship.get_object()->at(0);
+		Point planetCenter = planet.get_object()->at(0);
+		if ((abs(shipCenter.getX() - planetCenter.getX()) < 50)
+			&& (abs(shipCenter.getY() - planetCenter.getY()) < 50)
+			&& (abs(shipCenter.getZ() - planetCenter.getZ()) < 50))
+		{
+			std::cout << "COLLISION!!!!" << std::endl;
+		}
+
+
 	}
 }
