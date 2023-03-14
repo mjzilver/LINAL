@@ -60,7 +60,6 @@ void Render::DrawObject(WorldObject * object)
 			for (auto &connected_point : connected_points)
 			{
 				if (connected_point->draw())
-					//DrawLine(points[start].getWorldX(), points[start].getWorldY(), connected_point.getWorldX(), connected_point.getWorldY(), 0, 0, 0);
 					DrawLine(start.getX(), start.getY(), connected_point->getX(), connected_point->getY());
 			}
 		}

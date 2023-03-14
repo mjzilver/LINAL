@@ -1,4 +1,5 @@
 #include "SpaceShip.h"
+#include <iostream>
 
 SpaceShip::SpaceShip(Point source)
 {
@@ -41,6 +42,42 @@ SpaceShip::SpaceShip(Point source)
 	_connections[9].push_back(&_points[10]);
 	_connections[10].push_back(&_points[6]);
 	_connections[10].push_back(&_points[8]);
+}
+
+void SpaceShip::give_gas()
+{
+	if (speed < 10)
+		speed += 0.1f;
+}
+
+void SpaceShip::update() 
+{
+	position = position.translate(force.getX() * speed, force.getY() * speed, force.getZ() * speed) * position;
+
+	if (speed > 0.00f)
+		speed -= 0.05f;
+	else if (speed < 0.0f)
+		speed = 0.0f;
+}
+
+void SpaceShip::pitch(double degrees)
+{
+	std::cout << "Now printing start matrix" << std::endl;
+	position.print();
+	std::cout << "Now printing trans matrix" << std::endl;
+	position = position.pitch(degrees) * position;
+	position.pitch(degrees).print();
+	std::cout << "Now printing result matrix" << std::endl;
+	position.print();
+}
+
+void SpaceShip::yaw(double degrees)
+{
+}
+
+void SpaceShip::roll(double degrees)
+{
+
 }
 
 SpaceShip::~SpaceShip()

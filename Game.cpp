@@ -3,7 +3,7 @@
 #include <iostream>
 
 #include <SDL.h>
-#include "Matrices.h"
+#include "Matrix.h"
 #include "SpaceShip.h"
 #include "Planet.h"
 #undef main
@@ -53,56 +53,47 @@ void Game::StartGameLoop()
 			gameLoop = false;
 		}
 
-		render.Clear();
+		// rendering 
 
+		render.Clear();
 		render.DrawObject(&ship);
 		render.DrawObject(&planet);
 		render.DrawLine(0, 0, ship.get_object()->at(0).getX(), ship.get_object()->at(0).getY());
 		render.Draw();
-		Matrix shipPosition{ ship };
 		Matrix planetPosition{ planet };
 
 		ticks++;
+		// inputs
 
 		if(input.isKeyHeld(SDL_SCANCODE_LSHIFT))
 		{
-			shipPosition = shipPosition.translate(ship, 0.1, 0, 0);
-		}
-		if (input.isKeyHeld(SDL_SCANCODE_LALT))
-		{
-			shipPosition = shipPosition.translate(ship, -0.1, 0, 0);
+			ship.give_gas();
 		}
 
-		if (input.isKeyHeld(SDL_SCANCODE_A))
+		if (input.isKeyHeld(SDL_SCANCODE_LALT))
 		{
-			shipPosition = shipPosition.translate(ship, 0, -0.1, 0);
-		}
-		if (input.isKeyHeld(SDL_SCANCODE_D))
-		{
-			shipPosition = shipPosition.translate(ship, 0, 0.1, 0);
+			ship.position = ship.position.translate(ship, -0.1, 0, 0);
 		}
 
 		if (input.isKeyHeld(SDL_SCANCODE_Q))
-		{
-			shipPosition = shipPosition.rotate(ship, ship.get_object()->at(0), 1);
-			for (int i = 0; i < shipPosition.get_columns(); i++)
-			{
-				ship.get_object()->at(i).setX(shipPosition.getValue(0, i));
-				ship.get_object()->at(i).setY(shipPosition.getValue(1, i));
-				ship.get_object()->at(i).setZ(shipPosition.getValue(2, i));
-			}
-		}
-
+			ship.roll(5);
 		if (input.isKeyHeld(SDL_SCANCODE_E))
-		{
-			shipPosition = shipPosition.rotate(ship, ship.get_object()->at(0), -1);
-			for (int i = 0; i < shipPosition.get_columns(); i++)
-			{
-				ship.get_object()->at(i).setX(shipPosition.getValue(0, i));
-				ship.get_object()->at(i).setY(shipPosition.getValue(1, i));
-				ship.get_object()->at(i).setZ(shipPosition.getValue(2, i));
-			}
-		}
+			ship.roll(-5);
+		if (input.isKeyHeld(SDL_SCANCODE_W))
+			ship.pitch(5);
+		if (input.isKeyHeld(SDL_SCANCODE_S))
+			ship.pitch(-5);
+		if (input.isKeyHeld(SDL_SCANCODE_A))
+			ship.yaw(5);
+		if (input.isKeyHeld(SDL_SCANCODE_D))
+			ship.yaw(-5);
+		
+
+		// spaceship movement
+		ship.update();
+
+
+		// planet movement 
 
 		if (planetincrease)
 		{
@@ -124,15 +115,15 @@ void Game::StartGameLoop()
 			planet.get_object()->at(i).setY(planetPosition.getValue(1, i));
 			planet.get_object()->at(i).setZ(planetPosition.getValue(2, i));
 		}
-		for (int i = 0; i < shipPosition.get_columns(); i++)
+		for (int i = 0; i < ship.position.get_columns(); i++)
 		{
-			ship.get_object()->at(i).setX(shipPosition.getValue(0, i));
-			ship.get_object()->at(i).setY(shipPosition.getValue(1, i));
-			ship.get_object()->at(i).setZ(shipPosition.getValue(2, i));
+			ship.get_object()->at(i).setX(ship.position.getValue(0, i));
+			ship.get_object()->at(i).setY(ship.position.getValue(1, i));
+			ship.get_object()->at(i).setZ(ship.position.getValue(2, i));
 		}
 
 		// collision
-		for (int i = 0; i < shipPosition.get_columns(); i++)
+		for (int i = 0; i < ship.position.get_columns(); i++)
 		{
 			Point shipPoint = ship.get_object()->at(i);
 			for (int j = 0; j < planetPosition.get_columns(); j++)

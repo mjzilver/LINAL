@@ -12,6 +12,7 @@ public:
 	~Matrix();
 	void setValues(std::vector<double> values);
 	double getValue(const int row, const int column) { return matrix[row][column]; }
+	void setValue(const int row, const int column, bool value) { matrix[row][column] = value; }
 	bool canMultiply(Matrix other) { return this->get_columns() == other.get_rows(); }
 
 	// Matrix mathematical operations                                                                                                                                                                                               
@@ -28,10 +29,15 @@ public:
 	Matrix translate(double deltaX, double deltaY, double deltaZ);
 	Matrix scale(WorldObject object, double scaleX, double scaleY, double scaleZ);
 	Matrix rotate(WorldObject object, Point rotationPoint, int degrees);
+	void print();
 
 	int dotProduct(Point vector1, Point vector2);
 	Matrix crossProduct(Point vector1, Point vector2);
-	
+
+	Matrix yaw(double degrees);
+	Matrix pitch(double degrees);
+	Matrix roll(double degrees);
+
 private:
 	int _rows;
 	int _columns;
