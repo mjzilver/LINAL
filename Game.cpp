@@ -69,43 +69,52 @@ void Game::StartGameLoop()
 
 		if(input.isKeyHeld(SDL_SCANCODE_LSHIFT))
 		{
-			if (ship.speed < 10)
-				ship.speed += 0.1f;
+			if (ship.speed < 1)
+				ship.speed += 0.01f;
+		} else 	if (input.isKeyHeld(SDL_SCANCODE_LALT))
+		{
+			if (ship.speed < 0)
+				ship.speed -= 0.01f;
 		}
 
-		Matrix temp = shipPosition.getRelative(ship.get_point(0));
-
+		Matrix relative = shipPosition.getRelative(ship.get_center());
+		Matrix rotation = Matrix(4, 4);
 
 		if (input.isKeyHeld(SDL_SCANCODE_Q)) {
-			Matrix rotmat = temp.roll(1);
-
-			temp = rotmat * temp;
-
-			ship.force.print();
-			ship.force = rotmat.multiplyVector(ship.force);
-			ship.force.print();
-			
-			shipPosition = temp.getAbsolute(ship.get_point(0));
+			rotation = relative.roll(1);
+			ship.force = rotation.multiplyVector(ship.force);
+			relative = rotation* relative;
+			shipPosition = relative.getAbsolute(ship.get_center());
 		}
 		if (input.isKeyHeld(SDL_SCANCODE_E)) {
-			temp = temp.roll(-1) * temp;
-			shipPosition = temp.getAbsolute(ship.get_point(0));
+			rotation = relative.roll(-1);
+			ship.force = rotation.multiplyVector(ship.force);
+			relative = rotation * relative;
+			shipPosition = relative.getAbsolute(ship.get_center());
 		}
 		if (input.isKeyHeld(SDL_SCANCODE_W)) {
-			temp = temp.pitch(1) * temp;
-			shipPosition = temp.getAbsolute(ship.get_point(0));
+			rotation = relative.pitch(1);
+			ship.force = rotation.multiplyVector(ship.force);
+			relative = rotation * relative;
+			shipPosition = relative.getAbsolute(ship.get_center());
 		}
 		if (input.isKeyHeld(SDL_SCANCODE_S)) {
-			temp = temp.pitch(-1) * temp;
-			shipPosition = temp.getAbsolute(ship.get_point(0));
+			rotation = relative.pitch(-1);
+			ship.force = rotation.multiplyVector(ship.force);
+			relative = rotation * relative;
+			shipPosition = relative.getAbsolute(ship.get_center());
 		} 
 		if (input.isKeyHeld(SDL_SCANCODE_A)) {
-			temp = temp.yaw(1) * temp;
-			shipPosition = temp.getAbsolute(ship.get_point(0));
+			rotation = relative.yaw(1);
+			ship.force = rotation.multiplyVector(ship.force);
+			relative = rotation * relative;
+			shipPosition = relative.getAbsolute(ship.get_center());
 		}
 		if (input.isKeyHeld(SDL_SCANCODE_D)) {
-			temp = temp.yaw(-1) * temp;
-			shipPosition = temp.getAbsolute(ship.get_point(0));
+			rotation = relative.yaw(-1);
+			ship.force = rotation.multiplyVector(ship.force);
+			relative = rotation * relative;
+			shipPosition = relative.getAbsolute(ship.get_center());
 		}
 
 		// spaceship movement
@@ -115,7 +124,7 @@ void Game::StartGameLoop()
 			ship.force.getZ() * ship.speed) * shipPosition;
 
 		if (ship.speed > 0.00f)
-			ship.speed -= 0.05f;
+			ship.speed -= 0.001f;
 		else if (ship.speed < 0.0f)
 			ship.speed = 0.0f;
 

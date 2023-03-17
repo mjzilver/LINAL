@@ -9,9 +9,12 @@ public:
 	double getX() const { return _x; }
 	double getY() const { return _y; }
 	double getZ() const { return _z; }
+	double getW() const { return _w; }
+
 	void setX(const double x) { _x = x; }
 	void setY(const double y) { _y = y; }
 	void setZ(const double z) { _z = z; }
+	void setW(const double w) { _w = w; }
 
 	int getWorldX() const { return _worldX; }
 	int getWorldY() const { return _worldY; }

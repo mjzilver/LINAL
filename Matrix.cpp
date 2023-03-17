@@ -303,10 +303,27 @@ Matrix Matrix::getAbsolute(Point source)
 Point Matrix::multiplyVector(Point vector)
 {
 	Point result = Point(0,0,0);
-	for (int j = 0; j < _columns; j++) {
-		result.setX(result.getX() + (this->matrix[0][j] * vector.getX()));
-		result.setY(result.getY() + (this->matrix[1][j] * vector.getY()));
-		result.setZ(result.getZ() + (this->matrix[2][j] * vector.getZ()));
-	}
+
+	result.setX(this->matrix[0][0] * vector.getX() 
+		+ this->matrix[0][1] * vector.getY()
+		+ this->matrix[0][2] * vector.getZ()
+		+ this->matrix[0][3] * vector.getW()
+	);
+	result.setY(this->matrix[1][0] * vector.getX()
+		+ this->matrix[1][1] * vector.getY()
+		+ this->matrix[1][2] * vector.getZ()
+		+ this->matrix[1][3] * vector.getW()
+	);
+	result.setZ(this->matrix[2][0] * vector.getX()
+		+ this->matrix[2][1] * vector.getY()
+		+ this->matrix[2][2] * vector.getZ()
+		+ this->matrix[2][3] * vector.getW()
+	);
+	result.setW(this->matrix[3][0] * vector.getX()
+		+ this->matrix[3][1] * vector.getY()
+		+ this->matrix[3][2] * vector.getZ()
+		+ this->matrix[3][3] * vector.getW()
+	);
+
 	return result;
 }
