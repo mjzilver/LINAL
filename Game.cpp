@@ -58,43 +58,68 @@ void Game::StartGameLoop()
 		render.Clear();
 		render.DrawObject(&ship);
 		render.DrawObject(&planet);
-		render.DrawLine(0, 0, ship.get_object()->at(0).getX(), ship.get_object()->at(0).getY());
+		//render.DrawLine(0, 0, ship.get_object()->at(0).getX(), ship.get_object()->at(0).getY());
 		render.Draw();
 		Matrix planetPosition{ planet };
+		Matrix shipPosition{ ship };
+
 
 		ticks++;
 		// inputs
 
 		if(input.isKeyHeld(SDL_SCANCODE_LSHIFT))
 		{
-			ship.give_gas();
+			if (ship.speed < 10)
+				ship.speed += 0.1f;
 		}
 
-		if (input.isKeyHeld(SDL_SCANCODE_LALT))
-		{
-			ship.position = ship.position.translate(ship, -0.1, 0, 0);
-		}
+		Matrix temp = shipPosition.getRelative(ship.get_point(0));
 
-		if (input.isKeyHeld(SDL_SCANCODE_Q))
-			ship.roll(5);
-		if (input.isKeyHeld(SDL_SCANCODE_E))
-			ship.roll(-5);
-		if (input.isKeyHeld(SDL_SCANCODE_W))
-			ship.pitch(5);
-		if (input.isKeyHeld(SDL_SCANCODE_S))
-			ship.pitch(-5);
-		if (input.isKeyHeld(SDL_SCANCODE_A))
-			ship.yaw(5);
-		if (input.isKeyHeld(SDL_SCANCODE_D))
-			ship.yaw(-5);
-		
+
+		if (input.isKeyHeld(SDL_SCANCODE_Q)) {
+			Matrix rotmat = temp.roll(1);
+
+			temp = rotmat * temp;
+
+			ship.force.print();
+			ship.force = rotmat.multiplyVector(ship.force);
+			ship.force.print();
+			
+			shipPosition = temp.getAbsolute(ship.get_point(0));
+		}
+		if (input.isKeyHeld(SDL_SCANCODE_E)) {
+			temp = temp.roll(-1) * temp;
+			shipPosition = temp.getAbsolute(ship.get_point(0));
+		}
+		if (input.isKeyHeld(SDL_SCANCODE_W)) {
+			temp = temp.pitch(1) * temp;
+			shipPosition = temp.getAbsolute(ship.get_point(0));
+		}
+		if (input.isKeyHeld(SDL_SCANCODE_S)) {
+			temp = temp.pitch(-1) * temp;
+			shipPosition = temp.getAbsolute(ship.get_point(0));
+		} 
+		if (input.isKeyHeld(SDL_SCANCODE_A)) {
+			temp = temp.yaw(1) * temp;
+			shipPosition = temp.getAbsolute(ship.get_point(0));
+		}
+		if (input.isKeyHeld(SDL_SCANCODE_D)) {
+			temp = temp.yaw(-1) * temp;
+			shipPosition = temp.getAbsolute(ship.get_point(0));
+		}
 
 		// spaceship movement
-		ship.update();
+		shipPosition = shipPosition.translate(
+			ship.force.getX() * ship.speed,
+			ship.force.getY() * ship.speed,
+			ship.force.getZ() * ship.speed) * shipPosition;
 
+		if (ship.speed > 0.00f)
+			ship.speed -= 0.05f;
+		else if (ship.speed < 0.0f)
+			ship.speed = 0.0f;
 
 		// planet movement 
-
 		if (planetincrease)
 		{
 			if (ticks % 200 == 0)
@@ -115,15 +140,15 @@ void Game::StartGameLoop()
 			planet.get_object()->at(i).setY(planetPosition.getValue(1, i));
 			planet.get_object()->at(i).setZ(planetPosition.getValue(2, i));
 		}
-		for (int i = 0; i < ship.position.get_columns(); i++)
+		for (int i = 0; i < shipPosition.get_columns(); i++)
 		{
-			ship.get_object()->at(i).setX(ship.position.getValue(0, i));
-			ship.get_object()->at(i).setY(ship.position.getValue(1, i));
-			ship.get_object()->at(i).setZ(ship.position.getValue(2, i));
+			ship.get_object()->at(i).setX(shipPosition.getValue(0, i));
+			ship.get_object()->at(i).setY(shipPosition.getValue(1, i));
+			ship.get_object()->at(i).setZ(shipPosition.getValue(2, i));
 		}
 
 		// collision
-		for (int i = 0; i < ship.position.get_columns(); i++)
+		for (int i = 0; i < shipPosition.get_columns(); i++)
 		{
 			Point shipPoint = ship.get_object()->at(i);
 			for (int j = 0; j < planetPosition.get_columns(); j++)

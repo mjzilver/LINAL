@@ -1,4 +1,5 @@
 #pragma once
+
 class Point
 {
 public:
@@ -18,6 +19,10 @@ public:
 	void setWorldY(const double y) { _worldY = y; }
 	void setW(const int w) { _w = w; }
 	bool draw() { return _w >= 0; }
+
+	void print();
+
+	void normalize();
 private:
 	double _x;
 	double _y;

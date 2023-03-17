@@ -18,6 +18,7 @@ Matrix::Matrix(WorldObject object)
 {
 	_rows = 4;
 	_columns = object.get_object()->size();
+
 	auto points = object.get_object();
 	for (int i = 0; i < _columns; ++i) {
 		matrix[0][i] = points->at(i).getX();
@@ -94,12 +95,11 @@ Matrix & Matrix::operator-=(const Matrix & other)
 Matrix Matrix::operator*(const Matrix & other)
 {
 	Matrix result(_rows, other.get_columns());
-	std::vector<double> values;
 
 	for (int i = 0; i < _rows; i++) {
 		for (int j = 0; j < other.get_columns(); j++) {
 			for (int k = 0; k < _columns; k++) {
-				result.matrix[i][j] += this->matrix[i][k] * other.matrix[k][j];
+				result.addValue(i,j, this->matrix[i][k] * other.matrix[k][j]);
 			}
 		}
 	}
@@ -192,6 +192,7 @@ Matrix Matrix::rotate(WorldObject object, Point rotationPoint, int degrees)
 
 void Matrix::print()
 {
+	std::cout << "This matrix has " << _rows << " rows and " << _columns << " columns" << std::endl;
 	std::cout << getValue(0, 0) << ", " << getValue(0, 1) << ", " << getValue(0, 2) << ", " << getValue(0, 3) << std::endl;
 	std::cout << getValue(1, 0) << ", " << getValue(1, 1) << ", " << getValue(1, 2) << ", " << getValue(1, 3) << std::endl;
 	std::cout << getValue(2, 0) << ", " << getValue(2, 1) << ", " << getValue(2, 2) << ", " << getValue(2, 3) << std::endl;
@@ -205,10 +206,10 @@ Matrix Matrix::pitch(double degrees)
 	Matrix rotMat{ 4,4 };
 
 	rotMat.setValues(std::vector<double>{
-		0, 0, 0, 0,
+		1, 0, 0, 0,
 		0, cos(radian), -sin(radian), 0,
 		0, sin(radian), cos(radian), 0,
-		0, 0, 0, 0
+		0, 0, 0, 1
 	});
 	return rotMat;
 }
@@ -221,9 +222,9 @@ Matrix Matrix::yaw(double degrees)
 
 	rotMat.setValues(std::vector<double>{
 		cos(radian), 0, sin(radian), 0,
-		0, 0, 0, 0,
+		0, 1, 0, 0,
 		-sin(radian), 0, cos(radian), 0,
-		0, 0, 0, 0
+		0, 0, 0, 1
 	});
 	return rotMat;
 }
@@ -237,8 +238,8 @@ Matrix Matrix::roll(double degrees)
 	rotMat.setValues(std::vector<double>{
 		cos(radian), -sin(radian), 0, 0,
 		sin(radian), cos(radian), 0, 0,
-		0, 0, 0, 0,
-		0, 0, 0, 0
+		0, 0, 1, 0,
+		0, 0, 0, 1
 	});
 	return rotMat;
 }
@@ -256,5 +257,56 @@ Matrix Matrix::crossProduct(Point vector1, Point vector2)
 		(vector1.getZ()*vector2.getX()) - (vector1.getX()*vector2.getZ()),
 		(vector1.getX()*vector2.getY()) - (vector1.getY()*vector2.getX())
 		});
+	return result;
+}
+
+Matrix Matrix::getRelative(Point source)
+{
+	Matrix result{ _rows, _columns };
+	for (int i = 0; i < _rows; i++) {
+		for (int j = 0; j < _columns; j++) {
+			float value = 0;
+			if (i == 0)
+				value = source.getX();
+			if (i == 1)
+				value = source.getY();
+			if (i == 2)
+				value = source.getZ();
+
+			result.addValue(i, j, this->matrix[i][j] - value);
+		}
+	}
+
+	return result;
+}
+
+Matrix Matrix::getAbsolute(Point source)
+{
+	Matrix result{ _rows, _columns };
+	for (int i = 0; i < _rows; i++) {
+		for (int j = 0; j < _columns; j++) {
+			float value = 0;
+			if (i == 0)
+				value = source.getX();
+			if (i == 1)
+				value = source.getY();
+			if (i == 2)
+				value = source.getZ();
+
+			result.addValue(i, j, this->matrix[i][j] + value);
+		}
+	}
+
+	return result;
+}
+
+Point Matrix::multiplyVector(Point vector)
+{
+	Point result = Point(0,0,0);
+	for (int j = 0; j < _columns; j++) {
+		result.setX(result.getX() + (this->matrix[0][j] * vector.getX()));
+		result.setY(result.getY() + (this->matrix[1][j] * vector.getY()));
+		result.setZ(result.getZ() + (this->matrix[2][j] * vector.getZ()));
+	}
 	return result;
 }

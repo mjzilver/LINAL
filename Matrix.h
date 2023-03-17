@@ -12,7 +12,8 @@ public:
 	~Matrix();
 	void setValues(std::vector<double> values);
 	double getValue(const int row, const int column) { return matrix[row][column]; }
-	void setValue(const int row, const int column, bool value) { matrix[row][column] = value; }
+	void setValue(const int row, const int column, double value) { matrix[row][column] = value; }
+	void addValue(const int row, const int column, double value) { matrix[row][column] += value; }
 	bool canMultiply(Matrix other) { return this->get_columns() == other.get_rows(); }
 
 	// Matrix mathematical operations                                                                                                                                                                                               
@@ -33,6 +34,10 @@ public:
 
 	int dotProduct(Point vector1, Point vector2);
 	Matrix crossProduct(Point vector1, Point vector2);
+	Matrix getRelative(Point source);
+	Matrix getAbsolute(Point source);
+
+	Point multiplyVector(Point vector);
 
 	Matrix yaw(double degrees);
 	Matrix pitch(double degrees);
