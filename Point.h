@@ -4,7 +4,7 @@ class Point
 {
 public:
 	Point(const double x, const double y, const double z) : _x{ x }, _y{ y }, _z{ z }, _w{1} {};
-	Point() {};
+	Point() : _x{ 0 }, _y{ 0 }, _z{ 0 }, _w{ 1 } {};
 	~Point(){};
 	double getX() const { return _x; }
 	double getY() const { return _y; }
