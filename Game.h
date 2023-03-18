@@ -8,9 +8,7 @@ public:
 	Game();
 	~Game();
 	void StartGameLoop();
-	void yaw();
-	void pitch();
-	void roll();
+	bool BoxBoxCollision(BoundingBox a, BoundingBox b);
 private:
 	bool gameLoop = true;
 	Render render{};

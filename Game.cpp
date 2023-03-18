@@ -39,7 +39,6 @@ void Game::StartGameLoop()
 	{
 		// input gedeelte
 		input.resetKeys();
-		Point shipcenter = ship.get_center();
 
 		if (SDL_PollEvent(&SDL_event)) {
 			if (SDL_event.type == SDL_KEYDOWN)
@@ -67,8 +66,10 @@ void Game::StartGameLoop()
 		}
 		render.DrawObject(&ship);
 		render.DrawObject(&planet);
-		if (printHelperLine)
+		if (printHelperLine) {
+			Point shipcenter = ship.get_center();
 			render.DrawLine(shipcenter.getX(), shipcenter.getY(), shipcenter.getX() + ship.force.getX() * 1000, shipcenter.getY() + ship.force.getY() * 1000, 255, 0, 0);
+		}
 		render.Draw();
 		Matrix planetPosition{ planet };
 
@@ -79,23 +80,24 @@ void Game::StartGameLoop()
 			ship.speedUp();
 		} 
 
+		// all rotational keys
 		if (input.isKeyHeld(SDL_SCANCODE_Q)) {
-			ship.rotate(Matrix::roll(1));
+			ship.rotate(Matrix::roll(0.1));
 		}
 		if (input.isKeyHeld(SDL_SCANCODE_E)) {
-			ship.rotate(Matrix::roll(-1));
+			ship.rotate(Matrix::roll(-0.1));
 		}
 		if (input.isKeyHeld(SDL_SCANCODE_W)) {
-			ship.rotate(Matrix::pitch(1));
+			ship.rotate(Matrix::pitch(0.1));
 		}
 		if (input.isKeyHeld(SDL_SCANCODE_S)) {
-			ship.rotate(Matrix::pitch(-1));
+			ship.rotate(Matrix::pitch(-0.1));
 		} 
 		if (input.isKeyHeld(SDL_SCANCODE_A)) {
-			ship.rotate(Matrix::yaw(1));
+			ship.rotate(Matrix::yaw(0.1));
 		}
 		if (input.isKeyHeld(SDL_SCANCODE_D)) {
-			ship.rotate(Matrix::yaw(-1));
+			ship.rotate(Matrix::yaw(-0.1));
 		}
 
 		// toggles the helper line to show the bullet movement
@@ -132,19 +134,8 @@ void Game::StartGameLoop()
 		}
 
 		// collision
-		for (int i = 0; i < ship.position.get_columns(); i++)
-		{
-			Point shipPoint = ship.get_object()->at(i);
-			for (int j = 0; j < planetPosition.get_columns(); j++)
-			{
-				Point planetPoint = planet.get_object()->at(j);
-				if ((abs(shipPoint.getX() - planetPoint.getX()) < 25)
-					&& (abs(shipPoint.getY() - planetPoint.getY()) < 25)
-					&& (abs(shipPoint.getZ() - planetPoint.getZ()) < 25))
-				{
-					std::cout << "COLLISION!!!!" << std::endl;
-				}
-			}
+		if (BoxBoxCollision(ship.generateBoundingBox(), planet.generateBoundingBox())) {
+			std::cout << "Oeps!" << std::endl;
 		}
 
 		// All update cycles under here
@@ -154,12 +145,24 @@ void Game::StartGameLoop()
 		// bullet update cycle
 		for (int i = 0; i < bullets.size(); i++)
 		{
-			bullets.at(i)->update();
+			std::shared_ptr<Bullet> b = bullets.at(i);
+			b->update();
 
-			if (bullets.at(i)->get_point(0).getX() > 1024 || bullets.at(i)->get_point(0).getX() < 0
-				|| bullets.at(i)->get_point(0).getY() > 768 || bullets.at(i)->get_point(0).getY() < 0) {
+			if (b->get_point(0).getX() > 1024 || b->get_point(0).getX() < 0
+				|| b->get_point(0).getY() > 768 || b->get_point(0).getY() < 0) {
 				bullets.erase(bullets.begin() + i);
+			}
+
+			if (BoxBoxCollision(b->generateBoundingBox(), planet.generateBoundingBox())) {
+				std::cout << "Hit!!" << std::endl;
 			}
 		}
 	}
+}
+
+bool Game::BoxBoxCollision(BoundingBox a, BoundingBox b)
+{
+	return (a.minX <= b.maxX && a.maxX >= b.minX) &&
+		(a.minY <= b.maxY && a.maxY >= b.minY) &&
+		(a.minZ <= b.maxZ && a.maxZ >= b.minZ);
 }

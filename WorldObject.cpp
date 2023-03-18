@@ -26,3 +26,40 @@ Point WorldObject::get_center()
 
 	return Point(x, y, z);
 }
+
+BoundingBox WorldObject::generateBoundingBox()
+{
+	BoundingBox bb = BoundingBox();
+	for (int i = 0; i < _points.size(); i++)
+	{
+        Point& p = _points.at(i);
+
+		if (p.getX() < bb.minX || !bb.minXSet) {
+			bb.minX = p.getX();
+			bb.minXSet = true;
+		}
+		if (p.getX() > bb.maxX || !bb.maxXSet) {
+			bb.maxX = p.getX();
+			bb.maxXSet = true;
+		}
+       
+		if (p.getY() < bb.minY || !bb.minYSet) {
+			bb.minY = p.getY();
+			bb.minYSet = true;
+		}
+		if (p.getY() > bb.maxY || !bb.maxYSet) {
+			bb.maxY = p.getY();
+			bb.maxYSet = true;
+		}
+
+		if (p.getZ() < bb.minZ || !bb.minZSet) {
+			bb.minZ = p.getZ();
+			bb.minZSet = true;
+		}
+		if (p.getZ() > bb.maxZ || !bb.maxZSet) {
+			bb.maxZ = p.getZ();
+			bb.maxZSet = true;
+		}
+	}
+	return bb;
+}
