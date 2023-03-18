@@ -6,6 +6,8 @@
 #include "Matrix.h"
 #include "SpaceShip.h"
 #include "Planet.h"
+#include "Bullet.h"
+
 #undef main
 
 Game::Game()
@@ -27,6 +29,9 @@ void Game::StartGameLoop()
 	double planetpulse = 1;
 	int ticks = 0;
 	bool planetincrease = true;
+	bool printHelperLine = false;
+
+	std::vector<std::shared_ptr<Bullet>> bullets;
 
 	bool scaled = false;
 
@@ -34,6 +39,7 @@ void Game::StartGameLoop()
 	{
 		// input gedeelte
 		input.resetKeys();
+		Point shipcenter = ship.get_center();
 
 		if (SDL_PollEvent(&SDL_event)) {
 			if (SDL_event.type == SDL_KEYDOWN)
@@ -54,68 +60,82 @@ void Game::StartGameLoop()
 		}
 
 		// rendering 
-
 		render.Clear();
+		for (int i = 0; i < bullets.size(); i++)
+		{
+			render.DrawObject(bullets.at(i).get());
+		}
 		render.DrawObject(&ship);
 		render.DrawObject(&planet);
-		//render.DrawLine(0, 0, ship.get_object()->at(0).getX(), ship.get_object()->at(0).getY());
+		if (printHelperLine)
+			render.DrawLine(shipcenter.getX(), shipcenter.getY(), shipcenter.getX() + ship.force.getX() * 1000, shipcenter.getY() + ship.force.getY() * 1000, 255, 0, 0);
 		render.Draw();
 		Matrix planetPosition{ planet };
 		Matrix shipPosition{ ship };
 
-
 		ticks++;
 		// inputs
-
 		if(input.isKeyHeld(SDL_SCANCODE_LSHIFT))
 		{
-			if (ship.speed < 1)
-				ship.speed += 0.01f;
+			if (ship.speed < 0.5)
+				ship.speed += 0.005f;
 		} else 	if (input.isKeyHeld(SDL_SCANCODE_LALT))
 		{
 			if (ship.speed < 0)
-				ship.speed -= 0.01f;
+				ship.speed -= 0.005f;
 		}
 
-		Matrix relative = shipPosition.getRelative(ship.get_center());
+		Matrix relative = shipPosition.getRelative(shipcenter);
 		Matrix rotation = Matrix(4, 4);
 
 		if (input.isKeyHeld(SDL_SCANCODE_Q)) {
 			rotation = relative.roll(1);
 			ship.force = rotation.multiplyVector(ship.force);
 			relative = rotation* relative;
-			shipPosition = relative.getAbsolute(ship.get_center());
+			shipPosition = relative.getAbsolute(shipcenter);
 		}
 		if (input.isKeyHeld(SDL_SCANCODE_E)) {
 			rotation = relative.roll(-1);
 			ship.force = rotation.multiplyVector(ship.force);
 			relative = rotation * relative;
-			shipPosition = relative.getAbsolute(ship.get_center());
+			shipPosition = relative.getAbsolute(shipcenter);
 		}
 		if (input.isKeyHeld(SDL_SCANCODE_W)) {
 			rotation = relative.pitch(1);
 			ship.force = rotation.multiplyVector(ship.force);
 			relative = rotation * relative;
-			shipPosition = relative.getAbsolute(ship.get_center());
+			shipPosition = relative.getAbsolute(shipcenter);
 		}
 		if (input.isKeyHeld(SDL_SCANCODE_S)) {
 			rotation = relative.pitch(-1);
 			ship.force = rotation.multiplyVector(ship.force);
 			relative = rotation * relative;
-			shipPosition = relative.getAbsolute(ship.get_center());
+			shipPosition = relative.getAbsolute(shipcenter);
 		} 
 		if (input.isKeyHeld(SDL_SCANCODE_A)) {
 			rotation = relative.yaw(1);
 			ship.force = rotation.multiplyVector(ship.force);
 			relative = rotation * relative;
-			shipPosition = relative.getAbsolute(ship.get_center());
+			shipPosition = relative.getAbsolute(shipcenter);
 		}
 		if (input.isKeyHeld(SDL_SCANCODE_D)) {
 			rotation = relative.yaw(-1);
 			ship.force = rotation.multiplyVector(ship.force);
 			relative = rotation * relative;
-			shipPosition = relative.getAbsolute(ship.get_center());
+			shipPosition = relative.getAbsolute(shipcenter);
 		}
+
+		// toggles the helper line to show the bullet movement
+		if (input.wasKeyReleased(SDL_SCANCODE_H)) {
+			printHelperLine = !printHelperLine;
+		}
+
+		// space bar fires a bullet in the direction and speed of the shop
+		if (input.wasKeyReleased(SDL_SCANCODE_SPACE)) {
+			std::shared_ptr<Bullet> p = std::make_shared<Bullet>(ship.get_center(), ship.force, ship.speed);
+			bullets.push_back(p);
+		}
+
 
 		// spaceship movement
 		shipPosition = shipPosition.translate(
@@ -169,6 +189,17 @@ void Game::StartGameLoop()
 				{
 					std::cout << "COLLISION!!!!" << std::endl;
 				}
+			}
+		}
+
+		// bullet movement and such
+		for (int i = 0; i < bullets.size(); i++)
+		{
+			bullets.at(i)->update();
+
+			if (bullets.at(i)->get_point(0).getX() > 1024 || bullets.at(i)->get_point(0).getX() < 0
+				|| bullets.at(i)->get_point(0).getY() > 768 || bullets.at(i)->get_point(0).getY() < 0) {
+				bullets.erase(bullets.begin() + i);
 			}
 		}
 	}

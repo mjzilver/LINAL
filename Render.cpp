@@ -32,6 +32,7 @@ void Render::DrawLine(int x, int y, int x2, int y2, int r, int g, int b) const
 	SDL_RenderDrawLine(this->_renderer, x, y, x2, y2);
 }
 
+
 void Render::Draw() const {
 	SDL_RenderPresent(this->_renderer);	
 }
