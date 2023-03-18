@@ -39,9 +39,9 @@ public:
 
 	Point multiplyVector(Point vector);
 
-	Matrix yaw(double degrees);
-	Matrix pitch(double degrees);
-	Matrix roll(double degrees);
+	static Matrix yaw(double degrees);
+	static Matrix pitch(double degrees);
+	static Matrix roll(double degrees);
 
 private:
 	int _rows;

@@ -71,58 +71,31 @@ void Game::StartGameLoop()
 			render.DrawLine(shipcenter.getX(), shipcenter.getY(), shipcenter.getX() + ship.force.getX() * 1000, shipcenter.getY() + ship.force.getY() * 1000, 255, 0, 0);
 		render.Draw();
 		Matrix planetPosition{ planet };
-		Matrix shipPosition{ ship };
 
 		ticks++;
 		// inputs
 		if(input.isKeyHeld(SDL_SCANCODE_LSHIFT))
 		{
-			if (ship.speed < 0.5)
-				ship.speed += 0.005f;
-		} else 	if (input.isKeyHeld(SDL_SCANCODE_LALT))
-		{
-			if (ship.speed < 0)
-				ship.speed -= 0.005f;
-		}
-
-		Matrix relative = shipPosition.getRelative(shipcenter);
-		Matrix rotation = Matrix(4, 4);
+			ship.speedUp();
+		} 
 
 		if (input.isKeyHeld(SDL_SCANCODE_Q)) {
-			rotation = relative.roll(1);
-			ship.force = rotation.multiplyVector(ship.force);
-			relative = rotation* relative;
-			shipPosition = relative.getAbsolute(shipcenter);
+			ship.rotate(Matrix::roll(1));
 		}
 		if (input.isKeyHeld(SDL_SCANCODE_E)) {
-			rotation = relative.roll(-1);
-			ship.force = rotation.multiplyVector(ship.force);
-			relative = rotation * relative;
-			shipPosition = relative.getAbsolute(shipcenter);
+			ship.rotate(Matrix::roll(-1));
 		}
 		if (input.isKeyHeld(SDL_SCANCODE_W)) {
-			rotation = relative.pitch(1);
-			ship.force = rotation.multiplyVector(ship.force);
-			relative = rotation * relative;
-			shipPosition = relative.getAbsolute(shipcenter);
+			ship.rotate(Matrix::pitch(1));
 		}
 		if (input.isKeyHeld(SDL_SCANCODE_S)) {
-			rotation = relative.pitch(-1);
-			ship.force = rotation.multiplyVector(ship.force);
-			relative = rotation * relative;
-			shipPosition = relative.getAbsolute(shipcenter);
+			ship.rotate(Matrix::pitch(-1));
 		} 
 		if (input.isKeyHeld(SDL_SCANCODE_A)) {
-			rotation = relative.yaw(1);
-			ship.force = rotation.multiplyVector(ship.force);
-			relative = rotation * relative;
-			shipPosition = relative.getAbsolute(shipcenter);
+			ship.rotate(Matrix::yaw(1));
 		}
 		if (input.isKeyHeld(SDL_SCANCODE_D)) {
-			rotation = relative.yaw(-1);
-			ship.force = rotation.multiplyVector(ship.force);
-			relative = rotation * relative;
-			shipPosition = relative.getAbsolute(shipcenter);
+			ship.rotate(Matrix::yaw(-1));
 		}
 
 		// toggles the helper line to show the bullet movement
@@ -135,18 +108,6 @@ void Game::StartGameLoop()
 			std::shared_ptr<Bullet> p = std::make_shared<Bullet>(ship.get_center(), ship.force, ship.speed);
 			bullets.push_back(p);
 		}
-
-
-		// spaceship movement
-		shipPosition = shipPosition.translate(
-			ship.force.getX() * ship.speed,
-			ship.force.getY() * ship.speed,
-			ship.force.getZ() * ship.speed) * shipPosition;
-
-		if (ship.speed > 0.00f)
-			ship.speed -= 0.001f;
-		else if (ship.speed < 0.0f)
-			ship.speed = 0.0f;
 
 		// planet movement 
 		if (planetincrease)
@@ -169,15 +130,9 @@ void Game::StartGameLoop()
 			planet.get_object()->at(i).setY(planetPosition.getValue(1, i));
 			planet.get_object()->at(i).setZ(planetPosition.getValue(2, i));
 		}
-		for (int i = 0; i < shipPosition.get_columns(); i++)
-		{
-			ship.get_object()->at(i).setX(shipPosition.getValue(0, i));
-			ship.get_object()->at(i).setY(shipPosition.getValue(1, i));
-			ship.get_object()->at(i).setZ(shipPosition.getValue(2, i));
-		}
 
 		// collision
-		for (int i = 0; i < shipPosition.get_columns(); i++)
+		for (int i = 0; i < ship.position.get_columns(); i++)
 		{
 			Point shipPoint = ship.get_object()->at(i);
 			for (int j = 0; j < planetPosition.get_columns(); j++)
@@ -192,7 +147,11 @@ void Game::StartGameLoop()
 			}
 		}
 
-		// bullet movement and such
+		// All update cycles under here
+		// ship update
+		ship.update();
+
+		// bullet update cycle
 		for (int i = 0; i < bullets.size(); i++)
 		{
 			bullets.at(i)->update();

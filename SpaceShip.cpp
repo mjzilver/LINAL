@@ -42,8 +42,45 @@ SpaceShip::SpaceShip(Point source)
 	_connections[9].push_back(&_points[10]);
 	_connections[10].push_back(&_points[6]);
 	_connections[10].push_back(&_points[8]);
+
+	position = Matrix(*this);
 }
 
+
+void SpaceShip::update()
+{
+	position = position.translate(
+		force.getX() * speed,
+		force.getY() * speed,
+		force.getZ() * speed) * position;
+
+	if (speed > 0.00f)
+		speed -= 0.001f;
+	else if (speed < 0.0f)
+		speed = 0.0f;
+
+	for (int i = 0; i < position.get_columns(); i++)
+	{
+		_points.at(i).setX(position.getValue(0, i));
+		_points.at(i).setY(position.getValue(1, i));
+		_points.at(i).setZ(position.getValue(2, i));
+	}
+}
+
+void SpaceShip::rotate(Matrix rotation)
+{
+	Point shipcenter = get_center();
+	Matrix relative = position.getRelative(shipcenter);
+	force = rotation.multiplyVector(force);
+	relative = rotation * relative;
+	position = relative.getAbsolute(shipcenter);
+}
+
+void SpaceShip::speedUp()
+{
+	if (speed < 0.5)
+		speed += 0.005f;
+}
 
 SpaceShip::~SpaceShip()
 {
