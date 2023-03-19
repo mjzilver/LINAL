@@ -138,7 +138,7 @@ Matrix Matrix::scale(WorldObject object, double scaleX, double scaleY, double sc
 	return backToPosition * scale * toSource * objectMatrix;
 }
 
-Matrix Matrix::rotate(WorldObject object, Point rotationPoint, int degrees)
+Matrix Matrix::rotate(WorldObject object, Vector rotationPoint, int degrees)
 {
 	Matrix objectMatrix{ object };
 	Matrix M1{ 4,4 };
@@ -244,12 +244,12 @@ Matrix Matrix::roll(double degrees)
 	return rotMat;
 }
 
-int Matrix::dotProduct(Point vector1, Point vector2)
+int Matrix::dotProduct(Vector vector1, Vector vector2)
 {
 	return (vector1.getX()*vector2.getX())+(vector1.getY()*vector2.getY());
 }
 
-Matrix Matrix::crossProduct(Point vector1, Point vector2)
+Matrix Matrix::crossProduct(Vector vector1, Vector vector2)
 {
 	Matrix result{ 3,1 };
 	result.setValues({
@@ -260,7 +260,7 @@ Matrix Matrix::crossProduct(Point vector1, Point vector2)
 	return result;
 }
 
-Matrix Matrix::getRelative(Point source)
+Matrix Matrix::getRelative(Vector source)
 {
 	Matrix result{ _rows, _columns };
 	for (int i = 0; i < _rows; i++) {
@@ -280,7 +280,7 @@ Matrix Matrix::getRelative(Point source)
 	return result;
 }
 
-Matrix Matrix::getAbsolute(Point source)
+Matrix Matrix::getAbsolute(Vector source)
 {
 	Matrix result{ _rows, _columns };
 	for (int i = 0; i < _rows; i++) {
@@ -300,9 +300,9 @@ Matrix Matrix::getAbsolute(Point source)
 	return result;
 }
 
-Point Matrix::multiplyVector(Point vector)
+Vector Matrix::multiplyVector(Vector vector)
 {
-	Point result = Point(0,0,0);
+	Vector result = Vector(0,0,0);
 
 	result.setX(this->matrix[0][0] * vector.getX() 
 		+ this->matrix[0][1] * vector.getY()

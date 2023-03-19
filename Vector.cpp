@@ -1,13 +1,13 @@
-#include "Point.h"
+#include "Vector.h"
 #include <cmath>
 #include <iostream>
 
-void Point::print()
+void Vector::print()
 {
 	std::cout << "Point: " << _x << ", " << _y << ", " << _z << std::endl;
 }
 
-void Point::normalize()
+void Vector::normalize()
 {
 	double length = std::sqrt(_x * _x + _y * _y + _z * _z);
 	_x = _x / length;

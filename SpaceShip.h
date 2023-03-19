@@ -6,11 +6,11 @@ class SpaceShip :
 	public WorldObject
 {
 public:
-	SpaceShip(Point source);
+	SpaceShip(Vector source);
 
 	float speed{ 0.0f };
-	Point movement = Point(_source);
-	Point force = Point(1, 0, 0);
+	Vector movement = Vector(_source);
+	Vector force = Vector(1, 0, 0);
 	Matrix position = Matrix(4, 4);
 
 	void update();

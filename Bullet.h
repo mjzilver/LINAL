@@ -5,10 +5,10 @@ class Bullet :
     public WorldObject
 {
 public:
-    Bullet(Point source, Point force, float speed);
+    Bullet(Vector source, Vector force, float speed);
 
     float speed{ 0.5f };
-    Point force;
+    Vector force;
     Matrix position = Matrix(4, 4);
 
     void update();

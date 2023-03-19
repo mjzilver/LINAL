@@ -9,7 +9,7 @@ WorldObject::~WorldObject()
 {
 }
 
-Point WorldObject::get_center()
+Vector WorldObject::get_center()
 {
 	float x = 0;
 	float y = 0;
@@ -24,7 +24,7 @@ Point WorldObject::get_center()
 	y /= _points.size();
 	z /= _points.size();
 
-	return Point(x, y, z);
+	return Vector(x, y, z);
 }
 
 BoundingBox WorldObject::generateBoundingBox()
@@ -32,7 +32,7 @@ BoundingBox WorldObject::generateBoundingBox()
 	BoundingBox bb = BoundingBox();
 	for (int i = 0; i < _points.size(); i++)
 	{
-        Point& p = _points.at(i);
+        Vector& p = _points.at(i);
 
 		if (p.getX() < bb.minX || !bb.minXSet) {
 			bb.minX = p.getX();

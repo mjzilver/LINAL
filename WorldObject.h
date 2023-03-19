@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include <map>
-#include "Point.h"
+#include "Vector.h"
 
 struct BoundingBox {
     float minX;
@@ -36,18 +36,18 @@ class WorldObject
 public:
 	WorldObject();
 	~WorldObject();
-	std::vector<Point>* get_object() { return &_points; }
-	std::map<int,std::vector<Point*>> get_connections() { return _connections; }
-	Point get_source() { return _source; }
-	Point get_center();
-	Point get_point(int i) { return _points.at(i); }
+	std::vector<Vector>* get_object() { return &_points; }
+	std::map<int,std::vector<Vector*>> get_connections() { return _connections; }
+	Vector get_source() { return _source; }
+	Vector get_center();
+	Vector get_point(int i) { return _points.at(i); }
 
     BoundingBox generateBoundingBox();
 
 protected:
-	std::map<int, std::vector<Point*>> _connections;
-	std::vector<Point> _points;
-	Point _source;
+	std::map<int, std::vector<Vector*>> _connections;
+	std::vector<Vector> _points;
+	Vector _source;
     BoundingBox _boundingBox;
 };
 

@@ -1,20 +1,20 @@
 #include "SpaceShip.h"
 #include <iostream>
 
-SpaceShip::SpaceShip(Point source)
+SpaceShip::SpaceShip(Vector source)
 {
 	_source = source;
 	_points.push_back(_source);
-	Point point1{_source.getX()-25,_source.getY()-25,_source.getZ()};
-	Point point2{ _source.getX() - 25,_source.getY() - 25,_source.getZ() -50 };
-	Point point3{ _source.getX() - 25,_source.getY() + 25,_source.getZ() };
-	Point point4{ _source.getX() - 25,_source.getY() + 25,_source.getZ() -50};
-	Point point5{ _source.getX() + 25,_source.getY() - 25,_source.getZ() };
-	Point point6{ _source.getX() + 25,_source.getY() - 25,_source.getZ() -50};
-	Point point7{ _source.getX() + 25,_source.getY() + 25,_source.getZ() };
-	Point point8{ _source.getX() + 25,_source.getY() + 25,_source.getZ() -50};
-	Point point9{_source.getX() + 50, _source.getY(), _source.getZ()};
-	Point point10{ _source.getX() + 50, _source.getY(), _source.getZ()-50 };
+	Vector point1{_source.getX()-25,_source.getY()-25,_source.getZ()};
+	Vector point2{ _source.getX() - 25,_source.getY() - 25,_source.getZ() -50 };
+	Vector point3{ _source.getX() - 25,_source.getY() + 25,_source.getZ() };
+	Vector point4{ _source.getX() - 25,_source.getY() + 25,_source.getZ() -50};
+	Vector point5{ _source.getX() + 25,_source.getY() - 25,_source.getZ() };
+	Vector point6{ _source.getX() + 25,_source.getY() - 25,_source.getZ() -50};
+	Vector point7{ _source.getX() + 25,_source.getY() + 25,_source.getZ() };
+	Vector point8{ _source.getX() + 25,_source.getY() + 25,_source.getZ() -50};
+	Vector point9{_source.getX() + 50, _source.getY(), _source.getZ()};
+	Vector point10{ _source.getX() + 50, _source.getY(), _source.getZ()-50 };
 
 	_points.push_back(point1);
 	_points.push_back(point2);
@@ -69,7 +69,7 @@ void SpaceShip::update()
 
 void SpaceShip::rotate(Matrix rotation)
 {
-	Point shipcenter = get_center();
+	Vector shipcenter = get_center();
 	Matrix relative = position.getRelative(shipcenter);
 	force = rotation.multiplyVector(force);
 	relative = rotation * relative;

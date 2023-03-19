@@ -5,7 +5,7 @@
 #include <SDL.h>
 #include "Matrix.h"
 #include "SpaceShip.h"
-#include "Planet.h"
+#include "Target.h"
 #include "Bullet.h"
 
 #undef main
@@ -22,13 +22,8 @@ Game::~Game()
 void Game::StartGameLoop()
 {
 	SDL_Event SDL_event;
-	Point startLocation{ 400,400,10 };
-	SpaceShip ship { startLocation };
-	Point planetLocation{ 800, 400, 10 };
-	Planet planet{ planetLocation };
-	double planetpulse = 1;
-	int ticks = 0;
-	bool planetincrease = true;
+	SpaceShip ship{ Vector{ 400, 400, 10} };
+	Target target{ Vector{ 800, 400, 10 } };
 	bool printHelperLine = false;
 
 	std::vector<std::shared_ptr<Bullet>> bullets;
@@ -65,20 +60,16 @@ void Game::StartGameLoop()
 			render.DrawObject(bullets.at(i).get());
 		}
 		render.DrawObject(&ship);
-		render.DrawObject(&planet);
+		render.DrawObject(&target);
 		if (printHelperLine) {
-			Point shipcenter = ship.get_center();
+			Vector shipcenter = ship.get_center();
 			render.DrawLine(shipcenter.getX(), shipcenter.getY(), shipcenter.getX() + ship.force.getX() * 1000, shipcenter.getY() + ship.force.getY() * 1000, 255, 0, 0);
 		}
 		render.Draw();
-		Matrix planetPosition{ planet };
 
-		ticks++;
 		// inputs
 		if(input.isKeyHeld(SDL_SCANCODE_LSHIFT))
-		{
 			ship.speedUp();
-		} 
 
 		// all rotational keys
 		if (input.isKeyHeld(SDL_SCANCODE_Q)) {
@@ -101,9 +92,8 @@ void Game::StartGameLoop()
 		}
 
 		// toggles the helper line to show the bullet movement
-		if (input.wasKeyReleased(SDL_SCANCODE_H)) {
+		if (input.wasKeyReleased(SDL_SCANCODE_H)) 
 			printHelperLine = !printHelperLine;
-		}
 
 		// space bar fires a bullet in the direction and speed of the shop
 		if (input.wasKeyReleased(SDL_SCANCODE_SPACE)) {
@@ -111,34 +101,15 @@ void Game::StartGameLoop()
 			bullets.push_back(p);
 		}
 
-		// planet movement 
-		if (planetincrease)
-		{
-			if (ticks % 200 == 0)
-				planetincrease = false;
-			planetpulse = 1.0005;
-		}
-		else
-		{
-			if (ticks % 200 == 0)
-				planetincrease = true;			
-			planetpulse = 0.9995;
-		}
-		
-		planetPosition = planetPosition.scale(planet, planetpulse, planetpulse, planetpulse);
-		for (int i = 0; i < planetPosition.get_columns(); i++)
-		{
-			planet.get_object()->at(i).setX(planetPosition.getValue(0, i));
-			planet.get_object()->at(i).setY(planetPosition.getValue(1, i));
-			planet.get_object()->at(i).setZ(planetPosition.getValue(2, i));
-		}
-
 		// collision
-		if (BoxBoxCollision(ship.generateBoundingBox(), planet.generateBoundingBox())) {
-			std::cout << "Oeps!" << std::endl;
+		if (BoxBoxCollision(ship.generateBoundingBox(), target.generateBoundingBox())) {
+			std::cout << "You lost!" << std::endl;
+			gameLoop = false;
 		}
 
 		// All update cycles under here
+		// target update
+		target.update();
 		// ship update
 		ship.update();
 
@@ -148,13 +119,15 @@ void Game::StartGameLoop()
 			std::shared_ptr<Bullet> b = bullets.at(i);
 			b->update();
 
-			if (b->get_point(0).getX() > 1024 || b->get_point(0).getX() < 0
-				|| b->get_point(0).getY() > 768 || b->get_point(0).getY() < 0) {
+			// bullet goes off screen - delete bullet
+			if (b->get_point(0).getX() > 1024 || b->get_point(0).getX() < 0 || b->get_point(0).getY() > 768 || b->get_point(0).getY() < 0) {
 				bullets.erase(bullets.begin() + i);
 			}
 
-			if (BoxBoxCollision(b->generateBoundingBox(), planet.generateBoundingBox())) {
+			// bullet hits planet - delete planet
+			if (BoxBoxCollision(b->generateBoundingBox(), target.generateBoundingBox())) {
 				std::cout << "Hit!!" << std::endl;
+				// todo remove planet
 			}
 		}
 	}

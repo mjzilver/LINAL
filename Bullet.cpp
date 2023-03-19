@@ -1,12 +1,12 @@
 #include "Bullet.h"
 
-Bullet::Bullet(Point source, Point force, float speed)
+Bullet::Bullet(Vector source, Vector force, float speed)
 {
 	this->speed += speed;
 	_source = source;
 	this->force = force;
 	_points.push_back(_source);
-	Point point1{source.getX() + force.getX() * 10,
+	Vector point1{source.getX() + force.getX() * 10,
 		source.getY() + force.getY() * 10,
 		source.getZ() + force.getZ() * 10};
 	_points.push_back(point1);

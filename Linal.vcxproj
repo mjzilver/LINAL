@@ -130,8 +130,8 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Matrix.cpp" />
-    <ClCompile Include="Planet.cpp" />
-    <ClCompile Include="Point.cpp" />
+    <ClCompile Include="Target.cpp" />
+    <ClCompile Include="Vector.cpp" />
     <ClCompile Include="Render.cpp" />
     <ClCompile Include="SpaceShip.cpp" />
     <ClCompile Include="WorldObject.cpp" />
@@ -141,8 +141,8 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Matrix.h" />
-    <ClInclude Include="Planet.h" />
-    <ClInclude Include="Point.h" />
+    <ClInclude Include="Target.h" />
+    <ClInclude Include="Vector.h" />
     <ClInclude Include="Render.h" />
     <ClInclude Include="SpaceShip.h" />
     <ClInclude Include="WorldObject.h" />
