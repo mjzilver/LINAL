@@ -5,14 +5,14 @@ Target::Target(Vector start)
 {
 	_source = start;
 	_points.push_back(_source);
-	Vector point1{ _source.getX() - 50,_source.getY() - 50,_source.getZ() };
-	Vector point2{ _source.getX() - 50,_source.getY() - 50,_source.getZ() - 50 };
-	Vector point3{ _source.getX() - 50,_source.getY() + 50,_source.getZ() };
-	Vector point4{ _source.getX() - 50,_source.getY() + 50,_source.getZ() - 50 };
-	Vector point5{ _source.getX() + 50,_source.getY() - 50,_source.getZ() };
-	Vector point6{ _source.getX() + 50,_source.getY() - 50,_source.getZ() - 50 };
-	Vector point7{ _source.getX() + 50,_source.getY() + 50,_source.getZ() };
-	Vector point8{ _source.getX() + 50,_source.getY() + 50,_source.getZ() - 50 };
+	Vector point1{ _source.getX() - 30,_source.getY() - 30,_source.getZ() };
+	Vector point2{ _source.getX() - 30,_source.getY() - 30,_source.getZ() - 30 };
+	Vector point3{ _source.getX() - 30,_source.getY() + 30,_source.getZ() };
+	Vector point4{ _source.getX() - 30,_source.getY() + 30,_source.getZ() - 30 };
+	Vector point5{ _source.getX() + 30,_source.getY() - 30,_source.getZ() };
+	Vector point6{ _source.getX() + 30,_source.getY() - 30,_source.getZ() - 30 };
+	Vector point7{ _source.getX() + 30,_source.getY() + 30,_source.getZ() };
+	Vector point8{ _source.getX() + 30,_source.getY() + 30,_source.getZ() - 30 };
 
 	_points.push_back(point1);
 	_points.push_back(point2);

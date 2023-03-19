@@ -1,7 +1,7 @@
 #include "Game.h"
 #include "Render.h"
 #include <iostream>
-
+#include <algorithm>
 #include <SDL.h>
 #include "Matrix.h"
 #include "SpaceShip.h"
@@ -23,10 +23,14 @@ void Game::StartGameLoop()
 {
 	SDL_Event SDL_event;
 	SpaceShip ship{ Vector{ 400, 400, 10} };
-	Target target{ Vector{ 800, 400, 10 } };
 	bool printHelperLine = false;
 
 	std::vector<std::shared_ptr<Bullet>> bullets;
+	std::vector<std::shared_ptr<Target>> targets;
+
+	targets.push_back(std::make_shared<Target>(Vector{ 800, 400, 10 }));
+	targets.push_back(std::make_shared<Target>(Vector{ 100, 250, 10 }));
+	targets.push_back(std::make_shared<Target>(Vector{ 800, 200, 30 }));
 
 	bool scaled = false;
 
@@ -59,8 +63,12 @@ void Game::StartGameLoop()
 		{
 			render.DrawObject(bullets.at(i).get());
 		}
+
+		for (std::shared_ptr<Target> t : targets) {
+			render.DrawObject(t.get());
+		}
+
 		render.DrawObject(&ship);
-		render.DrawObject(&target);
 		if (printHelperLine) {
 			Vector shipcenter = ship.get_center();
 			render.DrawLine(shipcenter.getX(), shipcenter.getY(), shipcenter.getX() + ship.force.getX() * 1000, shipcenter.getY() + ship.force.getY() * 1000, 255, 0, 0);
@@ -101,17 +109,20 @@ void Game::StartGameLoop()
 			bullets.push_back(p);
 		}
 
-		// collision
-		if (BoxBoxCollision(ship.generateBoundingBox(), target.generateBoundingBox())) {
-			std::cout << "You lost!" << std::endl;
-			gameLoop = false;
-		}
-
 		// All update cycles under here
-		// target update
-		target.update();
 		// ship update
 		ship.update();
+
+		// target update
+		for (std::shared_ptr<Target> t : targets) {
+			t.get()->update();
+
+			// collision with the ship
+			if (BoxBoxCollision(ship.generateBoundingBox(), t.get()->generateBoundingBox())) {
+				std::cout << "You lost!" << std::endl;
+				gameLoop = false;
+			}
+		}
 
 		// bullet update cycle
 		for (int i = 0; i < bullets.size(); i++)
@@ -124,11 +135,19 @@ void Game::StartGameLoop()
 				bullets.erase(bullets.begin() + i);
 			}
 
-			// bullet hits planet - delete planet
-			if (BoxBoxCollision(b->generateBoundingBox(), target.generateBoundingBox())) {
-				std::cout << "Hit!!" << std::endl;
-				// todo remove planet
+			// go over all targets to do collision checks
+			for (int j = 0; j < targets.size(); j++)
+			{
+				std::shared_ptr<Target> t = targets.at(j);
+
+				// bullet hits planet - delete planet
+				if (BoxBoxCollision(b->generateBoundingBox(), t.get()->generateBoundingBox())) {
+					std::cout << "Hit!!" << std::endl;
+
+					targets.erase(targets.begin() + j);
+				}
 			}
+
 		}
 	}
 }
