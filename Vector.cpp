@@ -35,7 +35,7 @@ Vector Vector::operator*(const int value)
 	return result;
 }
 
-int Vector::dotProduct(const Vector& other)
+float Vector::dotProduct(const Vector& other)
 {
 	return (getX() * other.getX()) + (getY() * other.getY());
 }
@@ -43,7 +43,7 @@ int Vector::dotProduct(const Vector& other)
 
 void Vector::normalize()
 {
-	double length = std::sqrt(_x * _x + _y * _y + _z * _z);
+	float length = std::sqrt(_x * _x + _y * _y + _z * _z);
 	_x = _x / length;
 	_y = _y / length;
 	_z = _z / length;

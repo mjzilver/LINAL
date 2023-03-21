@@ -8,8 +8,6 @@
 class Game
 {
 public:
-	Game();
-	~Game();
 	void StartGameLoop();
 	bool BoxBoxCollision(BoundingBox a, BoundingBox b);
 private:

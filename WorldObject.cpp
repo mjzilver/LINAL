@@ -1,14 +1,6 @@
 #include "WorldObject.h"
 #include <iostream>
 
-WorldObject::WorldObject()
-{
-}
-
-WorldObject::~WorldObject()
-{
-}
-
 Vector WorldObject::get_center()
 {
 	float x = 0;

@@ -3,19 +3,19 @@
 class Vector
 {
 public:
-	Vector(const double x, const double y, const double z) : _x{ x }, _y{ y }, _z{ z }, _w{1} {};
-	Vector(const double x, const double y, const double z, const double w) : _x{ x }, _y{ y }, _z{ z }, _w{ w } {};
+	Vector(const float x, const float y, const float z) : _x{ x }, _y{ y }, _z{ z }, _w{1} {};
+	Vector(const float x, const float y, const float z, const float w) : _x{ x }, _y{ y }, _z{ z }, _w{ w } {};
 	Vector() : _x{ 0 }, _y{ 0 }, _z{ 0 }, _w{ 1 } {};
 	~Vector(){};
-	double getX() const { return _x; }
-	double getY() const { return _y; }
-	double getZ() const { return _z; }
-	double getW() const { return _w; }
+	float getX() const { return _x; }
+	float getY() const { return _y; }
+	float getZ() const { return _z; }
+	float getW() const { return _w; }
 
-	void setX(const double x) { _x = x; }
-	void setY(const double y) { _y = y; }
-	void setZ(const double z) { _z = z; }
-	void setW(const double w) { _w = w; }
+	void setX(const float x) { _x = x; }
+	void setY(const float y) { _y = y; }
+	void setZ(const float z) { _z = z; }
+	void setW(const float w) { _w = w; }
 
 	void print(); // debug function 
 
@@ -24,13 +24,13 @@ public:
 	Vector operator*(const Vector& other); // cross product
 	Vector operator*(const int value); 
 
-	int dotProduct(const Vector& other);
+	float dotProduct(const Vector& other);
 
 	void normalize();
 private:
-	double _x;
-	double _y;
-	double _z;
-	double _w;
+	float _x;
+	float _y;
+	float _z;
+	float _w;
 };
 

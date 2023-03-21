@@ -14,20 +14,13 @@
 
 #undef main
 
-Game::Game()
-{
-}
-
-Game::~Game()
-{
-}
-
 void Game::StartGameLoop()
 {
 	SDL_Event SDL_event;
 	SpaceShip ship{ Vector{ 400, 400, 10} };
 	bool printHelperLine = false;
 	bool cameraIsShip = false;
+	bool cameraIsStationary = false;
 
 	std::vector<std::shared_ptr<Bullet>> bullets;
 	std::vector<std::shared_ptr<Target>> targets;
@@ -38,6 +31,9 @@ void Game::StartGameLoop()
 	targets.push_back(std::make_shared<Target>(Vector{ 300, 300, 250 }));
 	targets.push_back(std::make_shared<Target>(Vector{ 600, 200, 0 }));
 	targets.push_back(std::make_shared<Target>(Vector{ 400, 880, 300 }));
+
+	MessageBox(HWND_DESKTOP, "Welcome to spaceship shooter 3D \n\nHere are the special controls\nX = toggle spaceship camera\nY = toggle stationary camera\n", "Welcome", MB_OK);
+
 
 	while (gameLoop)
 	{
@@ -66,14 +62,14 @@ void Game::StartGameLoop()
 		render.Clear();
 		for (int i = 0; i < bullets.size(); i++)
 		{
-			render.DrawObject(bullets.at(i).get(), camera);
+			render.DrawObject(*bullets.at(i).get(), camera);
 		}
 
 		for (std::shared_ptr<Target> t : targets) {
-			render.DrawObject(t.get(), camera);
+			render.DrawObject(*t.get(), camera);
 		}
 
-		render.DrawObject(&ship, camera);
+		render.DrawObject(*&ship, camera);
 		if (printHelperLine) {
 			Vector lineStart = ship.get_center();
 			Vector lineEnd = lineStart + (ship.force * 100);
@@ -106,27 +102,28 @@ void Game::StartGameLoop()
 
 		// all rotational keys
 		if (input.isKeyHeld(SDL_SCANCODE_Q)) {
-			ship.rotate(Matrix::roll(-0.1));
+			ship.rotate(Matrix::roll(-1));
 		}
 		if (input.isKeyHeld(SDL_SCANCODE_E)) {
-			ship.rotate(Matrix::roll(0.1));
+			ship.rotate(Matrix::roll(1));
 		}
 		if (input.isKeyHeld(SDL_SCANCODE_W)) {
-			ship.rotate(Matrix::pitch(0.1));
+			ship.rotate(Matrix::pitch(1));
 		}
 		if (input.isKeyHeld(SDL_SCANCODE_S)) {
-			ship.rotate(Matrix::pitch(-0.1));
+			ship.rotate(Matrix::pitch(-1));
 		} 
 		if (input.isKeyHeld(SDL_SCANCODE_A)) {
-			ship.rotate(Matrix::yaw(-0.1));
+			ship.rotate(Matrix::yaw(-1));
 		}
 		if (input.isKeyHeld(SDL_SCANCODE_D)) {
-			ship.rotate(Matrix::yaw(0.1));
+			ship.rotate(Matrix::yaw(1));
 		}
 
 		// toggles the helper line to show the bullet movement
-		if (input.wasKeyReleased(SDL_SCANCODE_H)) 
+		if (input.wasKeyReleased(SDL_SCANCODE_H)) {
 			printHelperLine = !printHelperLine;
+		}
 
 		// space bar fires a bullet in the direction and speed of the shop
 		if (input.wasKeyReleased(SDL_SCANCODE_SPACE)) {
@@ -141,13 +138,20 @@ void Game::StartGameLoop()
 		// toggle ship POV
 		if (input.wasKeyReleased(SDL_SCANCODE_X)) {
 			cameraIsShip = !cameraIsShip;
-			if (!cameraIsShip)
+			if (!cameraIsShip) {
 				camera.changePov(0);
+			}
+		}
+
+		if (input.wasKeyReleased(SDL_SCANCODE_Y)) {
+			cameraIsStationary = !cameraIsStationary;
 		}
 
 		// if the camera is locked the ship keep it moving along
-		if (cameraIsShip) {
-			camera.eye = ship.get_center();
+		if (!cameraIsStationary) {
+			if (cameraIsShip) {
+				camera.eye = ship.get_center();
+			}
 			camera.lookat = ship.get_center() + (ship.force);
 		}
 
@@ -161,7 +165,7 @@ void Game::StartGameLoop()
 
 			// collision with the ship
 			if (BoxBoxCollision(ship.generateBoundingBox(), t.get()->generateBoundingBox())) {
-				MessageBox(HWND_DESKTOP, "You died!", "You died!", MB_OK);
+				MessageBox(HWND_DESKTOP, "You crashed and died!", "You died!", MB_OK);
 				gameLoop = false;
 			}
 		}
@@ -189,7 +193,6 @@ void Game::StartGameLoop()
 					targets.erase(targets.begin() + j);
 				}
 			}
-
 		}
 	}
 }

@@ -81,7 +81,3 @@ void SpaceShip::speedUp()
 	if (speed < 0.5)
 		speed += 0.005f;
 }
-
-SpaceShip::~SpaceShip()
-{
-}

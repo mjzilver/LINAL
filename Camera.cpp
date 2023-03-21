@@ -51,14 +51,14 @@ Matrix Camera::getViewMatrix()
 	up.normalize();
 	direction.normalize();
 
-	trans.setValues(std::vector<double>{
+	trans.setValues(std::vector<float>{
 		right.getX(), right.getY(), right.getZ(), 0,
 		up.getX(), up.getY(), up.getZ(), 0,
 		direction.getX(), direction.getY(), direction.getZ(), 0,
 		0, 0, 0, 1
 	});
 
-	local.setValues(std::vector<double>{
+	local.setValues(std::vector<float>{
 		1, 0, 0, -eye.getX(),
 			0, 1, 0, -eye.getY(),
 			0, 0, 1, -eye.getZ(),
@@ -71,12 +71,12 @@ Matrix Camera::getViewMatrix()
 
 Matrix Camera::getProjectionMatrix()
 {
-	float scale = _near * std::tan(fov * 0.5);
+	float scale = _near * std::tan(fov * 0.5f);
 	float a = -_far / (_far - _near);
 	float b = (-_far * _near) / (_far - _near);
 
 	Matrix projection{ 4,4 };
-	projection.setValues(std::vector<double>{
+	projection.setValues(std::vector<float>{
 		scale, 0, 0, 0,
 			0, scale, 0, 0, 
 			0, 0, a, -1, 
@@ -88,7 +88,7 @@ Matrix Camera::getProjectionMatrix()
 
 	Matrix projection2{ 4,4 };
 
-	projection2.setValues(std::vector<double>{
+	projection2.setValues(std::vector<float>{
 		std::atan(fov/2), 0, 0, 0,
 			0, std::atan(fov/2), 0, 0,
 			0, 0, a, b,

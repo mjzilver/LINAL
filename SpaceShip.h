@@ -18,7 +18,5 @@ public:
 	void update();
 	void rotate(Matrix rotmat);
 	void speedUp();
-
-	~SpaceShip();
 };
 

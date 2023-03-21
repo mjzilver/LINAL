@@ -44,8 +44,9 @@ void Render::DrawLine(Vector v1, Vector v2, Camera cam, int red, int green, int 
 	b.setX((_screenWidth / 2) + (b.getX() / b.getW() * (_screenWidth / 2)));
 	b.setY((_screenHeight / 2) + (b.getY() / b.getW() * (_screenHeight / 2)));
 
-	if (a.getW() >= 1)
+	if (a.getW() >= 1) {
 		DrawLine(a.getX(), a.getY(), b.getX(), b.getY(), red, green, blue);
+	}
 }
 
 
@@ -59,35 +60,27 @@ void Render::Clear() const {
 	SDL_RenderClear(this->_renderer);
 }
 
-Render::~Render()
+void Render::DrawObject(WorldObject & object, Camera cam)
 {
-	
-}
-
-
-void Render::DrawObject(WorldObject * object, Camera cam)
-{
-	auto connections = object->get_connections();
-	auto points = object->get_object();
+	auto connections = object.get_connections();
+	auto points = object.get_object();
 	for(auto &connection : connections)
 	{
 		auto start = points->at(connection.first);
-		if(start.getW() >= 1)
+		auto connected_points = connection.second;
+		for (auto &connected_point : connected_points)
 		{
-			auto connected_points = connection.second;
-			for (auto &connected_point : connected_points)
-			{
-				Vector a = (cam.getProjectionMatrix() * cam.getViewMatrix()).multiplyVector(start);
-				Vector b = (cam.getProjectionMatrix() * cam.getViewMatrix()).multiplyVector(*connected_point);
+			Vector a = (cam.getProjectionMatrix() * cam.getViewMatrix()).multiplyVector(start);
+			Vector b = (cam.getProjectionMatrix() * cam.getViewMatrix()).multiplyVector(*connected_point);
 
-				a.setX((_screenWidth / 2) + (a.getX() / a.getW() * (_screenWidth / 2)));
-				a.setY((_screenHeight / 2) + (a.getY() / a.getW() * (_screenHeight / 2)));
+			a.setX((_screenWidth / 2) + (a.getX() / a.getW() * (_screenWidth / 2)));
+			a.setY((_screenHeight / 2) + (a.getY() / a.getW() * (_screenHeight / 2)));
 
-				b.setX((_screenWidth / 2) + (b.getX() / b.getW() * (_screenWidth / 2)));
-				b.setY((_screenHeight / 2) + (b.getY() / b.getW() * (_screenHeight / 2)));
+			b.setX((_screenWidth / 2) + (b.getX() / b.getW() * (_screenWidth / 2)));
+			b.setY((_screenHeight / 2) + (b.getY() / b.getW() * (_screenHeight / 2)));
 
-				if (b.getW() >= 1 && a.getW() >= 1)
-					DrawLine(a.getX(), a.getY(), b.getX(), b.getY());
+			if (b.getW() >= 1 && a.getW() >= 1) {
+				DrawLine(a.getX(), a.getY(), b.getX(), b.getY());
 			}
 		}
 	}

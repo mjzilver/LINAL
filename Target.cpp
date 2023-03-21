@@ -38,11 +38,6 @@ Target::Target(Vector start)
 	position = Matrix(*this);
 }
 
-
-Target::~Target()
-{
-}
-
 void Target::update()
 {
 	ticks++;

@@ -34,8 +34,6 @@ struct BoundingBox {
 class WorldObject
 {
 public:
-	WorldObject();
-	~WorldObject();
 	std::vector<Vector>* get_object() { return &_points; }
 	std::map<int,std::vector<Vector*>> get_connections() { return _connections; }
 	Vector get_source() { return _source; }

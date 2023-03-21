@@ -33,12 +33,7 @@ Matrix::Matrix(WorldObject object)
 	}
 }
 
-
-Matrix::~Matrix()
-{
-}
-
-void Matrix::setValues(std::vector<double> values)
+void Matrix::setValues(std::vector<float> values)
 {
 	int value = 0;
 	for (int i = 0; i < _rows; ++i) {
@@ -52,7 +47,7 @@ void Matrix::setValues(std::vector<double> values)
 Matrix Matrix::operator+(const Matrix & other)
 {
 	Matrix result(_rows,_columns);
-	std::vector<double> values;
+	std::vector<float> values;
 
 	for (int i = 0; i < _rows; i++) {
 		for (int j = 0; j < _columns; j++) {
@@ -76,7 +71,7 @@ Matrix & Matrix::operator+=(const Matrix & other)
 Matrix Matrix::operator-(const Matrix & other)
 {
 	Matrix result(_rows, _columns);
-	std::vector<double> values;
+	std::vector<float> values;
 
 	for (int i = 0; i < _rows; i++) {
 		for (int j = 0; j < _columns; j++) {
@@ -118,26 +113,26 @@ Matrix & Matrix::operator*=(const Matrix & other)
 	return *this;
 }
 
-Matrix Matrix::translate(WorldObject object, double deltaX, double deltaY, double deltaZ)
+Matrix Matrix::translate(WorldObject object, float deltaX, float deltaY, float deltaZ)
 {
 	Matrix translation{4,4};
 	Matrix objectMatrix{object};
-	translation.setValues(std::vector<double>{1, 0, 0, deltaX, 0, 1, 0, deltaY, 0, 0, 1, deltaZ, 0, 0, 0, 1});
+	translation.setValues(std::vector<float>{1, 0, 0, deltaX, 0, 1, 0, deltaY, 0, 0, 1, deltaZ, 0, 0, 0, 1});
 	return translation * objectMatrix;
 }
 
-Matrix Matrix::translate(double deltaX, double deltaY, double deltaZ)
+Matrix Matrix::translate(float deltaX, float deltaY, float deltaZ)
 {
 	Matrix translation{ 4,4 };
-	translation.setValues(std::vector<double>{1, 0, 0, deltaX, 0, 1, 0, deltaY, 0, 0, 1, deltaZ, 0, 0, 0, 1});
+	translation.setValues(std::vector<float>{1, 0, 0, deltaX, 0, 1, 0, deltaY, 0, 0, 1, deltaZ, 0, 0, 0, 1});
 	return translation;
 }
 
-Matrix Matrix::scale(WorldObject object, double scaleX, double scaleY, double scaleZ)
+Matrix Matrix::scale(WorldObject object, float scaleX, float scaleY, float scaleZ)
 {
 	Matrix scale{ 4,4 };
 	Matrix objectMatrix{object};
-	scale.setValues(std::vector<double>{scaleX, 0, 0, 0, 0, scaleY, 0, 0, 0, 0, scaleZ, 0, 0, 0, 0, 1});
+	scale.setValues(std::vector<float>{scaleX, 0, 0, 0, 0, scaleY, 0, 0, 0, 0, scaleZ, 0, 0, 0, 0, 1});
 	Matrix toSource = translate(-object.get_source().getX(), -object.get_source().getY(), -object.get_source().getZ());
 	Matrix backToPosition = translate(object.get_source().getX(), object.get_source().getY(), object.get_source().getZ());
 	return backToPosition * scale * toSource * objectMatrix;
@@ -151,41 +146,41 @@ Matrix Matrix::rotate(WorldObject object, Vector rotationPoint, int degrees)
 	Matrix M3{ 4,4 };
 	Matrix M4{ 4,4 };
 	Matrix M5{ 4,4 };
-	double radian = degrees * PI / 180.0;
+	float radian = degrees * PI / 180.0;
 	//x delen door wortel van x2 + y2
-	double rotateXY1 = rotationPoint.getX() / std::sqrt(std::pow((double)rotationPoint.getX(), 2) + std::pow((double)rotationPoint.getZ(), 2));
+	float rotateXY1 = rotationPoint.getX() / std::sqrt(std::pow((float)rotationPoint.getX(), 2) + std::pow((float)rotationPoint.getZ(), 2));
 	//z delen door wortel van x2 + y2
-	double rotateXY2 = rotationPoint.getZ() / std::sqrt(std::pow((double)rotationPoint.getX(), 2) + std::pow((double)rotationPoint.getZ(), 2));
+	float rotateXY2 = rotationPoint.getZ() / std::sqrt(std::pow((float)rotationPoint.getX(), 2) + std::pow((float)rotationPoint.getZ(), 2));
 	//y delen door wortel van x2 + y2 + z2
-	double rotateToX1 = rotationPoint.getY() / std::sqrt(std::pow((double)rotationPoint.getX(), 2) + std::pow((double)rotationPoint.getY(), 2) + std::pow((double)rotationPoint.getZ(), 2));
+	float rotateToX1 = rotationPoint.getY() / std::sqrt(std::pow((float)rotationPoint.getX(), 2) + std::pow((float)rotationPoint.getY(), 2) + std::pow((float)rotationPoint.getZ(), 2));
 	//wortel van x2 + z2 delen door wortel van x2 + y2 + z2
-	double rotateToX2 = std::sqrt(std::pow((double)rotationPoint.getX(), 2) + std::pow((double)rotationPoint.getZ(), 2)) / std::sqrt(std::pow((double)rotationPoint.getX(), 2) + std::pow((double)rotationPoint.getY(), 2) + std::pow((double)rotationPoint.getZ(), 2));
+	float rotateToX2 = std::sqrt(std::pow((float)rotationPoint.getX(), 2) + std::pow((float)rotationPoint.getZ(), 2)) / std::sqrt(std::pow((float)rotationPoint.getX(), 2) + std::pow((float)rotationPoint.getY(), 2) + std::pow((float)rotationPoint.getZ(), 2));
 
-	M5.setValues(std::vector<double>{
+	M5.setValues(std::vector<float>{
 		rotateXY1, 0, -rotateXY2, 0,
 		0, 1, 0, 0,
 		rotateXY2, 0, rotateXY1, 0,
 		0, 0, 0, 1
 	});
-	M4.setValues(std::vector<double>{
+	M4.setValues(std::vector<float>{
 		rotateToX2, -rotateToX1, 0, 0,
 		rotateToX1, rotateToX2, 0, 0,
 		0, 0, 1, 0,
 		0, 0, 0, 1
 	});
-	M3.setValues(std::vector<double>{
+	M3.setValues(std::vector<float>{
 		1, 0, 0, 0,
 		0, cos(radian), -sin(radian), 0,
 		0, sin(radian), cos(radian), 0,
 		0, 0, 0, 1
 	});
-	M2.setValues(std::vector<double>{
+	M2.setValues(std::vector<float>{
 		rotateToX2, rotateToX1, 0, 0,
 		-rotateToX1, rotateToX2, 0, 0,
 		0, 0, 1, 0,
 		0, 0, 0, 1
 	});
-	M1.setValues(std::vector<double>{
+	M1.setValues(std::vector<float>{
 		rotateXY1, 0, rotateXY2, 0,
 		0, 1, 0, 0,
 		-rotateXY2, 0, rotateXY1, 0,
@@ -205,12 +200,12 @@ void Matrix::print()
 }
 
 // RotationX
-Matrix Matrix::pitch(double degrees)
+Matrix Matrix::pitch(float degrees)
 {
-	double radian = degrees * PI / 180.0;
+	float radian = degrees * PI / 180.0;
 	Matrix rotMat{ 4,4 };
 
-	rotMat.setValues(std::vector<double>{
+	rotMat.setValues(std::vector<float>{
 		1, 0, 0, 0,
 		0, cos(radian), -sin(radian), 0,
 		0, sin(radian), cos(radian), 0,
@@ -220,12 +215,12 @@ Matrix Matrix::pitch(double degrees)
 }
 
 // RotationY
-Matrix Matrix::yaw(double degrees)
+Matrix Matrix::yaw(float degrees)
 {
-	double radian = degrees * PI / 180.0;
+	float radian = degrees * PI / 180.0;
 	Matrix rotMat{ 4,4 };
 
-	rotMat.setValues(std::vector<double>{
+	rotMat.setValues(std::vector<float>{
 		cos(radian), 0, sin(radian), 0,
 		0, 1, 0, 0,
 		-sin(radian), 0, cos(radian), 0,
@@ -235,12 +230,12 @@ Matrix Matrix::yaw(double degrees)
 }
 
 // RotationZ
-Matrix Matrix::roll(double degrees)
+Matrix Matrix::roll(float degrees)
 {
-	double radian = degrees * PI / 180.0;
+	float radian = degrees * PI / 180.0;
 	Matrix rotMat{ 4,4 };
 
-	rotMat.setValues(std::vector<double>{
+	rotMat.setValues(std::vector<float>{
 		cos(radian), -sin(radian), 0, 0,
 		sin(radian), cos(radian), 0, 0,
 		0, 0, 1, 0,

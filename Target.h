@@ -8,11 +8,10 @@ class Target :
 {
 public:
 	Target(Vector start);
-	~Target();
 
 	void update();
 
-	double scale = 1;
+	float scale = 1;
 	int ticks = 0;
 	bool increasing = true;
 	Matrix position;
