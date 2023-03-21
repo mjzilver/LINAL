@@ -15,9 +15,9 @@ public:
 	Vector up = Vector{0, 1, 0};
 	Vector right;
 
-	int fov = 80;
-	int _far = 100;
-	int _near = 1;
+	float fov = 80;
+	float _far = 500;
+	float _near = 10;
 
 	Matrix getViewMatrix();
 	Matrix getProjectionMatrix();

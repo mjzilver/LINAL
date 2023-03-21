@@ -31,9 +31,9 @@ void Game::StartGameLoop()
 	std::vector<std::shared_ptr<Bullet>> bullets;
 	std::vector<std::shared_ptr<Target>> targets;
 
-	targets.push_back(std::make_shared<Target>(Vector{ 800, 400, 10 }));
+	targets.push_back(std::make_shared<Target>(Vector{ 600, 400, 10 }));
 	targets.push_back(std::make_shared<Target>(Vector{ 100, 250, 10 }));
-	targets.push_back(std::make_shared<Target>(Vector{ 800, 200, 30 }));
+	targets.push_back(std::make_shared<Target>(Vector{ 600, 200, 30 }));
 
 	bool scaled = false;
 
@@ -73,8 +73,9 @@ void Game::StartGameLoop()
 
 		render.DrawObject(&ship, camera);
 		if (printHelperLine) {
-			Vector shipcenter = ship.get_center();
-			render.DrawLine(shipcenter.getX(), shipcenter.getY(), shipcenter.getX() + ship.force.getX() * 1000, shipcenter.getY() + ship.force.getY() * 1000, 255, 0, 0);
+			Vector lineStart = ship.get_center();
+			Vector lineEnd = Vector(lineStart.getX() + ship.force.getX() * 1000, lineStart.getY() + ship.force.getY() * 1000, lineStart.getZ() + ship.force.getZ(), lineStart.getW());
+			render.DrawLine(lineStart, lineEnd, camera, 255, 0, 0);
 		}
 		render.Draw();
 
@@ -130,6 +131,10 @@ void Game::StartGameLoop()
 		if (input.wasKeyReleased(SDL_SCANCODE_SPACE)) {
 			std::shared_ptr<Bullet> p = std::make_shared<Bullet>(ship.get_center(), ship.force, ship.speed);
 			bullets.push_back(p);
+			// if more than 10 bullets delete one :)
+			if (bullets.size() > 10) {
+				bullets.erase(bullets.begin());
+			}
 		}
 
 		// All update cycles under here
@@ -164,11 +169,6 @@ void Game::StartGameLoop()
 		{
 			std::shared_ptr<Bullet> b = bullets.at(i);
 			b->update();
-
-			// bullet goes off screen - delete bullet
-			if (b->get_point(0).getX() > 1024 || b->get_point(0).getX() < 0 || b->get_point(0).getY() > 768 || b->get_point(0).getY() < 0) {
-				bullets.erase(bullets.begin() + i);
-			}
 
 			// go over all targets to do collision checks
 			for (int j = 0; j < targets.size(); j++)

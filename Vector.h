@@ -4,6 +4,7 @@ class Vector
 {
 public:
 	Vector(const double x, const double y, const double z) : _x{ x }, _y{ y }, _z{ z }, _w{1} {};
+	Vector(const double x, const double y, const double z, const double w) : _x{ x }, _y{ y }, _z{ z }, _w{ w } {};
 	Vector() : _x{ 0 }, _y{ 0 }, _z{ 0 }, _w{ 1 } {};
 	~Vector(){};
 	double getX() const { return _x; }
@@ -21,6 +22,8 @@ public:
 	Vector operator-(const Vector& other);
 	Vector operator+(const Vector& other);
 	Vector operator*(const Vector& other);
+
+	int dotProduct(const Vector& other);
 
 	void normalize();
 private:

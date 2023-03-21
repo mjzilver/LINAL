@@ -249,22 +249,6 @@ Matrix Matrix::roll(double degrees)
 	return rotMat;
 }
 
-int Matrix::dotProduct(Vector vector1, Vector vector2)
-{
-	return (vector1.getX()*vector2.getX())+(vector1.getY()*vector2.getY());
-}
-
-Matrix Matrix::crossProduct(Vector vector1, Vector vector2)
-{
-	Matrix result{ 3,1 };
-	result.setValues({
-		(vector1.getY()*vector2.getZ()) - (vector1.getZ()*vector2.getY()),
-		(vector1.getZ()*vector2.getX()) - (vector1.getX()*vector2.getZ()),
-		(vector1.getX()*vector2.getY()) - (vector1.getY()*vector2.getX())
-		});
-	return result;
-}
-
 Matrix Matrix::getRelative(Vector source)
 {
 	Matrix result{ _rows, _columns };

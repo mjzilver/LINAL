@@ -25,6 +25,11 @@ Vector Vector::operator*(const Vector& other)
 		this->_x * other.getY() - this->_y * other.getX());
 }
 
+int Vector::dotProduct(const Vector& other)
+{
+	return (getX() * other.getX()) + (getY() * other.getY());
+}
+
 
 void Vector::normalize()
 {

@@ -56,10 +56,8 @@ Matrix Camera::getProjectionMatrix()
 			0, 0, b, 0
 	});
 
-	projection.print();
-	
-	a = -(_far + _near / _far - _near);
-	b = -(2 * (_near * _far) / _far - _near);
+	a = -((_far + _near) / (_far - _near));
+	b = -(2 * (_near * _far) / (_far - _near));
 
 	Matrix projection2{ 4,4 };
 
@@ -69,5 +67,6 @@ Matrix Camera::getProjectionMatrix()
 			0, 0, a, b,
 			0, 0, -1, 0
 	});
-	return projection2;
+
+	return projection;
 }

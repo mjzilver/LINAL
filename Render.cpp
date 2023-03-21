@@ -33,6 +33,21 @@ void Render::DrawLine(int x, int y, int x2, int y2, int r, int g, int b) const
 	SDL_RenderDrawLine(this->_renderer, x, y, x2, y2);
 }
 
+void Render::DrawLine(Vector v1, Vector v2, Camera cam, int red, int green, int blue) const
+{
+	Vector a = (cam.getProjectionMatrix() * cam.getViewMatrix()).multiplyVector(v1);
+	Vector b = (cam.getProjectionMatrix() * cam.getViewMatrix()).multiplyVector(v2);
+
+	a.setX((_screenWidth / 2) + (a.getX() / a.getW() * (_screenWidth / 2)));
+	a.setY((_screenHeight / 2) + (a.getY() / a.getW() * (_screenHeight / 2)));
+
+	b.setX((_screenWidth / 2) + (b.getX() / b.getW() * (_screenWidth / 2)));
+	b.setY((_screenHeight / 2) + (b.getY() / b.getW() * (_screenHeight / 2)));
+
+	if (a.getW() == 1)
+		DrawLine(a.getX(), a.getY(), b.getX(), b.getY(), red, green, blue);
+}
+
 
 void Render::Draw() const {
 	SDL_RenderPresent(this->_renderer);	
@@ -49,6 +64,7 @@ Render::~Render()
 	
 }
 
+
 void Render::DrawObject(WorldObject * object, Camera cam)
 {
 	auto connections = object->get_connections();
@@ -61,11 +77,16 @@ void Render::DrawObject(WorldObject * object, Camera cam)
 			auto connected_points = connection.second;
 			for (auto &connected_point : connected_points)
 			{
-				cam.getProjectionMatrix().print();
 				Vector a = (cam.getProjectionMatrix() * cam.getViewMatrix()).multiplyVector(start);
 				Vector b = (cam.getProjectionMatrix() * cam.getViewMatrix()).multiplyVector(*connected_point);
 
-				if (connected_point->getW() == 1)
+				a.setX((_screenWidth / 2) + (a.getX() / a.getW() * (_screenWidth / 2)));
+				a.setY((_screenHeight / 2) + (a.getY() / a.getW() * (_screenHeight / 2)));
+
+				b.setX((_screenWidth / 2) + (b.getX() / b.getW() * (_screenWidth / 2)));
+				b.setY((_screenHeight / 2) + (b.getY() / b.getW() * (_screenHeight / 2)));
+
+				if (connected_point->getW() >= 1)
 					DrawLine(a.getX(), a.getY(), b.getX(), b.getY());
 			}
 		}
