@@ -37,7 +37,7 @@ Vector Vector::operator*(const int value)
 
 float Vector::dotProduct(const Vector& other)
 {
-	return (getX() * other.getX()) + (getY() * other.getY());
+	return (getX() * other.getX()) + (getY() * other.getY() + (getZ() * other.getZ()));
 }
 
 

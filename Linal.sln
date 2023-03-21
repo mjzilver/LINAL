@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2003
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31105.61
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Linal", "Linal.vcxproj", "{FAF01E49-64ED-45FB-B069-839934C1B09C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "linal-test", "linal-test\linal-test.vcxproj", "{8BCE602E-C251-434E-ADC0-859F94A1FF12}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,14 @@ Global
 		{FAF01E49-64ED-45FB-B069-839934C1B09C}.Release|x64.Build.0 = Release|x64
 		{FAF01E49-64ED-45FB-B069-839934C1B09C}.Release|x86.ActiveCfg = Release|Win32
 		{FAF01E49-64ED-45FB-B069-839934C1B09C}.Release|x86.Build.0 = Release|Win32
+		{8BCE602E-C251-434E-ADC0-859F94A1FF12}.Debug|x64.ActiveCfg = Debug|x64
+		{8BCE602E-C251-434E-ADC0-859F94A1FF12}.Debug|x64.Build.0 = Debug|x64
+		{8BCE602E-C251-434E-ADC0-859F94A1FF12}.Debug|x86.ActiveCfg = Debug|Win32
+		{8BCE602E-C251-434E-ADC0-859F94A1FF12}.Debug|x86.Build.0 = Debug|Win32
+		{8BCE602E-C251-434E-ADC0-859F94A1FF12}.Release|x64.ActiveCfg = Release|x64
+		{8BCE602E-C251-434E-ADC0-859F94A1FF12}.Release|x64.Build.0 = Release|x64
+		{8BCE602E-C251-434E-ADC0-859F94A1FF12}.Release|x86.ActiveCfg = Release|Win32
+		{8BCE602E-C251-434E-ADC0-859F94A1FF12}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -18,15 +18,7 @@ Render::Render()
 	SDL_SetWindowTitle(this->_window, _name);
 }
 
-void Render::DrawSquare(int x, int y, int width, int height, int r, int g, int b) const {
-
-	SDL_SetRenderDrawColor(this->_renderer, r, g, b, 0);
-
-	SDL_Rect rect{ rect.x = x, rect.y = y, rect.w = width, rect.h = height };
-	SDL_RenderFillRect(this->_renderer, &rect);
-}
-
-void Render::DrawLine(int x, int y, int x2, int y2, int r, int g, int b) const
+void Render::DrawLine(float x, float y, float x2, float y2, int r, int g, int b) const
 {
 	SDL_SetRenderDrawColor(this->_renderer, r, g, b, 0);
 
