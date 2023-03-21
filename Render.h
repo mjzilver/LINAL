@@ -25,7 +25,7 @@ public:
 	void Clear() const;
 
 	~Render();
-	void DrawObject(WorldObject*object);
+	void DrawObject(WorldObject*object, Camera cam);
 private:
 	SDL_Window* _window{};
 	SDL_Renderer* _renderer{};

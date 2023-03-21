@@ -15,6 +15,6 @@ public:
 	double scale = 1;
 	int ticks = 0;
 	bool increasing = true;
-	Matrix position = Matrix(4, 4);
+	Matrix position;
 };
 

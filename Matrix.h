@@ -7,6 +7,7 @@
 class Matrix
 {
 public:
+	Matrix();
 	Matrix(int rows, int columns);
 	Matrix(WorldObject object);
 	~Matrix();

@@ -16,9 +16,11 @@ public:
 	void setZ(const double z) { _z = z; }
 	void setW(const double w) { _w = w; }
 
-	bool draw() { return _w >= 0; }
-
 	void print();
+
+	Vector operator-(const Vector& other);
+	Vector operator+(const Vector& other);
+	Vector operator*(const Vector& other);
 
 	void normalize();
 private:

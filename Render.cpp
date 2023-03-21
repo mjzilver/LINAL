@@ -1,4 +1,5 @@
 #include "Render.h"
+#include "Vector.h"
 
 #include <SDL.h>
 #undef main
@@ -48,20 +49,24 @@ Render::~Render()
 	
 }
 
-void Render::DrawObject(WorldObject * object)
+void Render::DrawObject(WorldObject * object, Camera cam)
 {
 	auto connections = object->get_connections();
 	auto points = object->get_object();
 	for(auto &connection : connections)
 	{
 		auto start = points->at(connection.first);
-		if(start.draw())
+		if(start.getW() == 1)
 		{
 			auto connected_points = connection.second;
 			for (auto &connected_point : connected_points)
 			{
-				if (connected_point->draw())
-					DrawLine(start.getX(), start.getY(), connected_point->getX(), connected_point->getY());
+				cam.getProjectionMatrix().print();
+				Vector a = (cam.getProjectionMatrix() * cam.getViewMatrix()).multiplyVector(start);
+				Vector b = (cam.getProjectionMatrix() * cam.getViewMatrix()).multiplyVector(*connected_point);
+
+				if (connected_point->getW() == 1)
+					DrawLine(a.getX(), a.getY(), b.getX(), b.getY());
 			}
 		}
 	}

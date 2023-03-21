@@ -9,7 +9,7 @@ public:
 
     float speed{ 0.5f };
     Vector force;
-    Matrix position = Matrix(4, 4);
+    Matrix position = Matrix();
 
     void update();
 };

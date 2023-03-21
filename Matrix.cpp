@@ -3,6 +3,11 @@
 #include <cmath>
 #include <iostream>
 
+Matrix::Matrix()
+{
+	// empty - only used as placeholder
+}
+
 Matrix::Matrix(int rows, int columns) : _rows{rows}, _columns{columns}
 {
 	int value = 0;

@@ -1,9 +1,13 @@
-#include "Game.h"
-#include "Render.h"
 #include <iostream>
+#include <windows.h>
+#include <stdlib.h>
 #include <algorithm>
 #include <SDL.h>
+
+#include "Game.h"
+#include "Render.h"
 #include "Matrix.h"
+#include "Camera.h"
 #include "SpaceShip.h"
 #include "Target.h"
 #include "Bullet.h"
@@ -13,7 +17,6 @@
 Game::Game()
 {
 }
-
 
 Game::~Game()
 {
@@ -61,14 +64,14 @@ void Game::StartGameLoop()
 		render.Clear();
 		for (int i = 0; i < bullets.size(); i++)
 		{
-			render.DrawObject(bullets.at(i).get());
+			render.DrawObject(bullets.at(i).get(), camera);
 		}
 
 		for (std::shared_ptr<Target> t : targets) {
-			render.DrawObject(t.get());
+			render.DrawObject(t.get(), camera);
 		}
 
-		render.DrawObject(&ship);
+		render.DrawObject(&ship, camera);
 		if (printHelperLine) {
 			Vector shipcenter = ship.get_center();
 			render.DrawLine(shipcenter.getX(), shipcenter.getY(), shipcenter.getX() + ship.force.getX() * 1000, shipcenter.getY() + ship.force.getY() * 1000, 255, 0, 0);
@@ -79,12 +82,32 @@ void Game::StartGameLoop()
 		if(input.isKeyHeld(SDL_SCANCODE_LSHIFT))
 			ship.speedUp();
 
+		if (input.wasKeyReleased(SDL_SCANCODE_UP)) {
+			camera.eye.setY(camera.eye.getY() - 10);
+		}
+		if (input.wasKeyReleased(SDL_SCANCODE_DOWN)) {
+			camera.eye.setY(camera.eye.getY() + 10);
+		}
+		if (input.wasKeyReleased(SDL_SCANCODE_RIGHT)) {
+			camera.eye.setX(camera.eye.getX() + 10);
+		}
+		if (input.wasKeyReleased(SDL_SCANCODE_LEFT)) {
+			camera.eye.setX(camera.eye.getX() - 10);
+		}
+		if (input.wasKeyReleased(SDL_SCANCODE_PAGEUP)) {
+			camera.lookat.setY((camera.lookat.getY() - 10));
+		}
+		if (input.wasKeyReleased(SDL_SCANCODE_PAGEDOWN)) {
+			camera.lookat.setY((camera.lookat.getY() + 10));
+		}
+
+
 		// all rotational keys
 		if (input.isKeyHeld(SDL_SCANCODE_Q)) {
-			ship.rotate(Matrix::roll(0.1));
+			ship.rotate(Matrix::roll(-0.1));
 		}
 		if (input.isKeyHeld(SDL_SCANCODE_E)) {
-			ship.rotate(Matrix::roll(-0.1));
+			ship.rotate(Matrix::roll(0.1));
 		}
 		if (input.isKeyHeld(SDL_SCANCODE_W)) {
 			ship.rotate(Matrix::pitch(0.1));
@@ -93,10 +116,10 @@ void Game::StartGameLoop()
 			ship.rotate(Matrix::pitch(-0.1));
 		} 
 		if (input.isKeyHeld(SDL_SCANCODE_A)) {
-			ship.rotate(Matrix::yaw(0.1));
+			ship.rotate(Matrix::yaw(-0.1));
 		}
 		if (input.isKeyHeld(SDL_SCANCODE_D)) {
-			ship.rotate(Matrix::yaw(-0.1));
+			ship.rotate(Matrix::yaw(0.1));
 		}
 
 		// toggles the helper line to show the bullet movement
@@ -112,6 +135,17 @@ void Game::StartGameLoop()
 		// All update cycles under here
 		// ship update
 		ship.update();
+		
+		// alle coords moeten lokaal zijn dus en niet in de eigen wereld 
+		// de camera transformatie moet eenmalig gedaan worden en dus alleen effect hebben op de getekende punten maar NIET op de reële punten in de coordinaten 
+		// dus bij het tekenen word de camera transformatie matrix toegepast maar niet op de coordinaten
+		// dit allemaal in de renderer doen zoiets van 
+		// get transformation matrix
+		// get connections
+		// transform connections
+		// draw transformed connections
+		// good luck!
+
 
 		// target update
 		for (std::shared_ptr<Target> t : targets) {
@@ -119,7 +153,8 @@ void Game::StartGameLoop()
 
 			// collision with the ship
 			if (BoxBoxCollision(ship.generateBoundingBox(), t.get()->generateBoundingBox())) {
-				std::cout << "You lost!" << std::endl;
+				MessageBox(HWND_DESKTOP, "You died!", "You died!", MB_OK);
+
 				gameLoop = false;
 			}
 		}
