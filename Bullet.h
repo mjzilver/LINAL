@@ -7,7 +7,7 @@ class Bullet :
 public:
     Bullet(Vector source, Vector force, float speed);
 
-    float speed{ 0.5f };
+    float speed{ 1.5f };
     Vector force;
     Matrix position = Matrix();
 

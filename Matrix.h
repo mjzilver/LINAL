@@ -15,9 +15,8 @@ public:
 	double getValue(const int row, const int column) { return matrix[row][column]; }
 	void setValue(const int row, const int column, double value) { matrix[row][column] = value; }
 	void addValue(const int row, const int column, double value) { matrix[row][column] += value; }
-	bool canMultiply(Matrix other) { return this->get_columns() == other.get_rows(); }
 
-	// Matrix mathematical operations                                                                                                                                                                                               
+	// Matrix operations                                                                                                                                                                                               
 	Matrix operator+(const Matrix& other);
 	int get_rows() const { return _rows; };
 	int get_columns() const { return _columns; };
@@ -31,10 +30,7 @@ public:
 	Matrix translate(double deltaX, double deltaY, double deltaZ);
 	Matrix scale(WorldObject object, double scaleX, double scaleY, double scaleZ);
 	Matrix rotate(WorldObject object, Vector rotationPoint, int degrees);
-	void print();
 
-	int dotProduct(Vector vector1, Vector vector2);
-	Matrix crossProduct(Vector vector1, Vector vector2);
 	Matrix getRelative(Vector source);
 	Matrix getAbsolute(Vector source);
 
@@ -44,6 +40,7 @@ public:
 	static Matrix pitch(double degrees);
 	static Matrix roll(double degrees);
 
+	void print();// debug function 
 private:
 	int _rows;
 	int _columns;

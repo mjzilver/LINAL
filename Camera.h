@@ -6,7 +6,7 @@
 class Camera
 {
 public:
-	Camera(Vector position, Vector lookat);
+	Camera();
 
 	Vector eye;
 	Vector lookat;
@@ -17,10 +17,12 @@ public:
 
 	float fov = 80;
 	float _far = 500;
-	float _near = 10;
+	float _near = 50;
+
+	int currentPov =1;
 
 	Matrix getViewMatrix();
 	Matrix getProjectionMatrix();
-
+	void changePov(int change);
 };
 

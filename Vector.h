@@ -17,11 +17,11 @@ public:
 	void setZ(const double z) { _z = z; }
 	void setW(const double w) { _w = w; }
 
-	void print();
+	void print(); // debug function 
 
 	Vector operator-(const Vector& other);
 	Vector operator+(const Vector& other);
-	Vector operator*(const Vector& other);
+	Vector operator*(const Vector& other); // cross product
 
 	int dotProduct(const Vector& other);
 

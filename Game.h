@@ -16,7 +16,6 @@ private:
 	bool gameLoop = true;
 	Render render;
 	Input input;
-	Camera camera = Camera(Vector{ 400, 400, 400 },
-		Vector{ 400, 400, -1 });
+	Camera camera = Camera();
 };
 

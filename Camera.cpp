@@ -1,14 +1,41 @@
 #include "Camera.h"
 #include <iostream>
 
-Camera::Camera(Vector eye, Vector lookat)
+Camera::Camera()
 {
-	this->eye = eye;
-	this->lookat = lookat;
+	this->eye = Vector{ 400, 400, 400 };
+	this->lookat = Vector{ 400, 400, -1 };
 
 	direction = eye - lookat;
 	right = up * direction;
 	up = direction * right;
+}
+
+void Camera::changePov(int change)
+{
+	if (currentPov + change > 0 && currentPov + change <= 5) {
+		currentPov += change;
+		if (currentPov == 1) {
+			this->eye = Vector{ 400, 400, 400 };
+			this->lookat = Vector{ 400, 400, -1 };
+		}
+		else if (currentPov == 2) {
+			this->eye = Vector{ 800, 400, 100 };
+			this->lookat = Vector{ 400, 400, -1 };
+		}
+		else if (currentPov == 3) {
+			this->eye = Vector{ 400, 800, 100 };
+			this->lookat = Vector{ 400, 400, -1 };
+		} 
+		else if (currentPov == 4) {
+			this->eye = Vector{ 0, 800, 100 };
+			this->lookat = Vector{ 400, 400, -1 };
+		}
+		else if (currentPov == 5) {
+			this->eye = Vector{ 400, 400, -400 };
+			this->lookat = Vector{ 400, 400, -1 };
+		}
+	}
 }
 
 Matrix Camera::getViewMatrix()

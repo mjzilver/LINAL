@@ -31,11 +31,12 @@ void Game::StartGameLoop()
 	std::vector<std::shared_ptr<Bullet>> bullets;
 	std::vector<std::shared_ptr<Target>> targets;
 
-	targets.push_back(std::make_shared<Target>(Vector{ 600, 400, 10 }));
-	targets.push_back(std::make_shared<Target>(Vector{ 100, 250, 10 }));
-	targets.push_back(std::make_shared<Target>(Vector{ 600, 200, 30 }));
-
-	bool scaled = false;
+	targets.push_back(std::make_shared<Target>(Vector{ 600, 410, 10 }));
+	targets.push_back(std::make_shared<Target>(Vector{ 100, 250, 300 }));
+	targets.push_back(std::make_shared<Target>(Vector{ 930, 400, 30 }));
+	targets.push_back(std::make_shared<Target>(Vector{ 300, 300, 250 }));
+	targets.push_back(std::make_shared<Target>(Vector{ 600, 200, 0 }));
+	targets.push_back(std::make_shared<Target>(Vector{ 400, 880, 300 }));
 
 	while (gameLoop)
 	{
@@ -96,12 +97,11 @@ void Game::StartGameLoop()
 			camera.eye.setX(camera.eye.getX() - 10);
 		}
 		if (input.wasKeyReleased(SDL_SCANCODE_PAGEUP)) {
-			camera.lookat.setY((camera.lookat.getY() - 10));
+			camera.changePov(1);
 		}
 		if (input.wasKeyReleased(SDL_SCANCODE_PAGEDOWN)) {
-			camera.lookat.setY((camera.lookat.getY() + 10));
+			camera.changePov(-1);
 		}
-
 
 		// all rotational keys
 		if (input.isKeyHeld(SDL_SCANCODE_Q)) {
@@ -131,8 +131,8 @@ void Game::StartGameLoop()
 		if (input.wasKeyReleased(SDL_SCANCODE_SPACE)) {
 			std::shared_ptr<Bullet> p = std::make_shared<Bullet>(ship.get_center(), ship.force, ship.speed);
 			bullets.push_back(p);
-			// if more than 10 bullets delete one :)
-			if (bullets.size() > 10) {
+			// if more than 20 bullets delete one :)
+			if (bullets.size() > 20) {
 				bullets.erase(bullets.begin());
 			}
 		}
@@ -141,17 +141,6 @@ void Game::StartGameLoop()
 		// ship update
 		ship.update();
 		
-		// alle coords moeten lokaal zijn dus en niet in de eigen wereld 
-		// de camera transformatie moet eenmalig gedaan worden en dus alleen effect hebben op de getekende punten maar NIET op de reële punten in de coordinaten 
-		// dus bij het tekenen word de camera transformatie matrix toegepast maar niet op de coordinaten
-		// dit allemaal in de renderer doen zoiets van 
-		// get transformation matrix
-		// get connections
-		// transform connections
-		// draw transformed connections
-		// good luck!
-
-
 		// target update
 		for (std::shared_ptr<Target> t : targets) {
 			t.get()->update();

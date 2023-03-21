@@ -44,7 +44,7 @@ void Render::DrawLine(Vector v1, Vector v2, Camera cam, int red, int green, int 
 	b.setX((_screenWidth / 2) + (b.getX() / b.getW() * (_screenWidth / 2)));
 	b.setY((_screenHeight / 2) + (b.getY() / b.getW() * (_screenHeight / 2)));
 
-	if (a.getW() == 1)
+	if (a.getW() >= 1)
 		DrawLine(a.getX(), a.getY(), b.getX(), b.getY(), red, green, blue);
 }
 
@@ -72,7 +72,7 @@ void Render::DrawObject(WorldObject * object, Camera cam)
 	for(auto &connection : connections)
 	{
 		auto start = points->at(connection.first);
-		if(start.getW() == 1)
+		if(start.getW() >= 1)
 		{
 			auto connected_points = connection.second;
 			for (auto &connected_point : connected_points)
@@ -86,7 +86,7 @@ void Render::DrawObject(WorldObject * object, Camera cam)
 				b.setX((_screenWidth / 2) + (b.getX() / b.getW() * (_screenWidth / 2)));
 				b.setY((_screenHeight / 2) + (b.getY() / b.getW() * (_screenHeight / 2)));
 
-				if (connected_point->getW() >= 1)
+				if (b.getW() >= 1 && a.getW() >= 1)
 					DrawLine(a.getX(), a.getY(), b.getX(), b.getY());
 			}
 		}
