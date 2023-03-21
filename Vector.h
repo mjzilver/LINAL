@@ -22,6 +22,7 @@ public:
 	Vector operator-(const Vector& other);
 	Vector operator+(const Vector& other);
 	Vector operator*(const Vector& other); // cross product
+	Vector operator*(const int value); 
 
 	int dotProduct(const Vector& other);
 

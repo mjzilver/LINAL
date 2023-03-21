@@ -27,6 +27,7 @@ void Game::StartGameLoop()
 	SDL_Event SDL_event;
 	SpaceShip ship{ Vector{ 400, 400, 10} };
 	bool printHelperLine = false;
+	bool cameraIsShip = false;
 
 	std::vector<std::shared_ptr<Bullet>> bullets;
 	std::vector<std::shared_ptr<Target>> targets;
@@ -75,7 +76,7 @@ void Game::StartGameLoop()
 		render.DrawObject(&ship, camera);
 		if (printHelperLine) {
 			Vector lineStart = ship.get_center();
-			Vector lineEnd = Vector(lineStart.getX() + ship.force.getX() * 1000, lineStart.getY() + ship.force.getY() * 1000, lineStart.getZ() + ship.force.getZ(), lineStart.getW());
+			Vector lineEnd = lineStart + (ship.force * 100);
 			render.DrawLine(lineStart, lineEnd, camera, 255, 0, 0);
 		}
 		render.Draw();
@@ -137,6 +138,19 @@ void Game::StartGameLoop()
 			}
 		}
 
+		// toggle ship POV
+		if (input.wasKeyReleased(SDL_SCANCODE_X)) {
+			cameraIsShip = !cameraIsShip;
+			if (!cameraIsShip)
+				camera.changePov(0);
+		}
+
+		// if the camera is locked the ship keep it moving along
+		if (cameraIsShip) {
+			camera.eye = ship.get_center();
+			camera.lookat = ship.get_center() + (ship.force);
+		}
+
 		// All update cycles under here
 		// ship update
 		ship.update();
@@ -148,9 +162,13 @@ void Game::StartGameLoop()
 			// collision with the ship
 			if (BoxBoxCollision(ship.generateBoundingBox(), t.get()->generateBoundingBox())) {
 				MessageBox(HWND_DESKTOP, "You died!", "You died!", MB_OK);
-
 				gameLoop = false;
 			}
+		}
+
+		if (targets.size() == 0) {
+			MessageBox(HWND_DESKTOP, "All targets have been destroyed, good job!", "You won!", MB_OK);
+			gameLoop = false;
 		}
 
 		// bullet update cycle

@@ -25,6 +25,16 @@ Vector Vector::operator*(const Vector& other)
 		this->_x * other.getY() - this->_y * other.getX());
 }
 
+Vector Vector::operator*(const int value)
+{
+	Vector result;
+	result.setX(this->_x * value);
+	result.setY(this->_y * value);
+	result.setZ(this->_z * value);
+
+	return result;
+}
+
 int Vector::dotProduct(const Vector& other)
 {
 	return (getX() * other.getX()) + (getY() * other.getY());
