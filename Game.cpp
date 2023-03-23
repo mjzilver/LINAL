@@ -27,10 +27,11 @@ void Game::StartGameLoop()
 
 	targets.push_back(std::make_shared<Target>(Vector{ 600, 410, 10 }));
 	targets.push_back(std::make_shared<Target>(Vector{ 100, 250, 300 }));
-	targets.push_back(std::make_shared<Target>(Vector{ 930, 400, 30 }));
+	targets.push_back(std::make_shared<Target>(Vector{ 930, 400, -30 }));
 	targets.push_back(std::make_shared<Target>(Vector{ 300, 300, 250 }));
 	targets.push_back(std::make_shared<Target>(Vector{ 600, 200, 0 }));
-	targets.push_back(std::make_shared<Target>(Vector{ 400, 880, 300 }));
+	targets.push_back(std::make_shared<Target>(Vector{ 400, 880, -100 }));
+	targets.push_back(std::make_shared<Target>(Vector{ 310, 10, -250 }));
 
 	MessageBox(HWND_DESKTOP, "Welcome to spaceship shooter 3D \n\nHere are the special controls\nX = toggle spaceship camera\nY = toggle stationary camera\n", "Welcome", MB_OK);
 
@@ -72,7 +73,7 @@ void Game::StartGameLoop()
 		render.DrawObject(*&ship, camera);
 		if (printHelperLine) {
 			Vector lineStart = ship.get_center();
-			Vector lineEnd = lineStart + (ship.force * 100);
+			Vector lineEnd = lineStart + (ship.force * 1000);
 			render.DrawLine(lineStart, lineEnd, camera, 255, 0, 0);
 		}
 		render.Draw();
@@ -81,17 +82,17 @@ void Game::StartGameLoop()
 		if(input.isKeyHeld(SDL_SCANCODE_LSHIFT))
 			ship.speedUp();
 
-		if (input.wasKeyReleased(SDL_SCANCODE_UP)) {
-			camera.eye.setY(camera.eye.getY() - 10);
+		if (input.isKeyHeld(SDL_SCANCODE_UP)) {
+			camera.eye.setY(camera.eye.getY() - 1);
 		}
-		if (input.wasKeyReleased(SDL_SCANCODE_DOWN)) {
-			camera.eye.setY(camera.eye.getY() + 10);
+		if (input.isKeyHeld(SDL_SCANCODE_DOWN)) {
+			camera.eye.setY(camera.eye.getY() + 1);
 		}
-		if (input.wasKeyReleased(SDL_SCANCODE_RIGHT)) {
-			camera.eye.setX(camera.eye.getX() + 10);
+		if (input.isKeyHeld(SDL_SCANCODE_RIGHT)) {
+			camera.eye.setX(camera.eye.getX() + 1);
 		}
-		if (input.wasKeyReleased(SDL_SCANCODE_LEFT)) {
-			camera.eye.setX(camera.eye.getX() - 10);
+		if (input.isKeyHeld(SDL_SCANCODE_LEFT)) {
+			camera.eye.setX(camera.eye.getX() - 1);
 		}
 		if (input.wasKeyReleased(SDL_SCANCODE_PAGEUP)) {
 			camera.changePov(1);
@@ -188,8 +189,6 @@ void Game::StartGameLoop()
 
 				// bullet hits planet - delete planet
 				if (BoxBoxCollision(b->generateBoundingBox(), t.get()->generateBoundingBox())) {
-					std::cout << "Hit!!" << std::endl;
-
 					targets.erase(targets.begin() + j);
 				}
 			}

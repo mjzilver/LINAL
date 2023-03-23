@@ -36,7 +36,7 @@ void Render::DrawLine(Vector v1, Vector v2, Camera cam, int red, int green, int 
 	b.setX((_screenWidth / 2) + (b.getX() / b.getW() * (_screenWidth / 2)));
 	b.setY((_screenHeight / 2) + (b.getY() / b.getW() * (_screenHeight / 2)));
 
-	if (a.getW() >= 1) {
+	if (a.getW() >= 1 && b.getW() >= 1) {
 		DrawLine(a.getX(), a.getY(), b.getX(), b.getY(), red, green, blue);
 	}
 }
