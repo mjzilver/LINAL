@@ -7,6 +7,7 @@
 class Matrix
 {
 public:
+	Matrix() {};
 	Matrix(int rows, int columns);
 	Matrix(WorldObject object);
 	void setValues(std::vector<float> values);
