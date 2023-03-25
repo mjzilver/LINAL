@@ -1,7 +1,11 @@
 #pragma once
 
 #include <SDL.h>
-#include "SpaceShip.h"
+#include "Vector.h"
+#include "WorldObject.h"
+#include "Camera.h"
+
+// this makes SDL work
 #undef main
 
 struct SDL_Window;

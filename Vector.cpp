@@ -1,6 +1,4 @@
 #include "Vector.h"
-#include <cmath>
-#include <iostream>
 
 void Vector::print()
 {
@@ -39,7 +37,6 @@ float Vector::dotProduct(const Vector& other)
 {
 	return (getX() * other.getX()) + (getY() * other.getY() + (getZ() * other.getZ()));
 }
-
 
 void Vector::normalize()
 {

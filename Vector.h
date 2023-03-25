@@ -1,4 +1,6 @@
 #pragma once
+#include <cmath>
+#include <iostream>
 
 class Vector
 {
@@ -21,9 +23,11 @@ public:
 
 	Vector operator-(const Vector& other);
 	Vector operator+(const Vector& other);
-	Vector operator*(const Vector& other); // cross product
+	// cross product of two vectors
+	Vector operator*(const Vector& other); 
+	// multiply vector by int
 	Vector operator*(const int value); 
-
+	// dot product of two vectors
 	float dotProduct(const Vector& other);
 
 	void normalize();

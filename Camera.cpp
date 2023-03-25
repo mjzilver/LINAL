@@ -1,5 +1,4 @@
 #include "Camera.h"
-#include <iostream>
 
 Camera::Camera()
 {
@@ -81,18 +80,6 @@ Matrix Camera::getProjectionMatrix()
 			0, scale, 0, 0, 
 			0, 0, a, -1, 
 			0, 0, b, 0
-	});
-
-	a = -((_far + _near) / (_far - _near));
-	b = -(2 * (_near * _far) / (_far - _near));
-
-	Matrix projection2{ 4,4 };
-
-	projection2.setValues(std::vector<float>{
-		std::atan(fov/2), 0, 0, 0,
-			0, std::atan(fov/2), 0, 0,
-			0, 0, a, b,
-			0, 0, -1, 0
 	});
 
 	return projection;

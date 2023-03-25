@@ -1,5 +1,4 @@
 #include "Target.h"
-#include "Vector.h"
 
 Target::Target(Vector start)
 {
@@ -43,9 +42,9 @@ void Target::update()
 	ticks++;
 
 	if (increasing)
-		scale += 0.000001;
+		scale += 0.000001f;
 	else
-		scale -= 0.000001;
+		scale -= 0.000001f;
 
 	if (scale >= 1.0005)
 		increasing = false;

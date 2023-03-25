@@ -1,5 +1,4 @@
 #include "SpaceShip.h"
-#include <iostream>
 
 SpaceShip::SpaceShip(Vector source)
 {

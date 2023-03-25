@@ -11,7 +11,6 @@ struct BoundingBox {
     float maxY;
     float maxZ;
 
-
     bool minXSet = false;
     bool minYSet = false;
     bool minZSet = false;
@@ -41,7 +40,6 @@ public:
 	Vector get_point(int i) { return _points.at(i); }
 
     BoundingBox generateBoundingBox();
-
 protected:
 	std::map<int, std::vector<Vector*>> _connections;
 	std::vector<Vector> _points;

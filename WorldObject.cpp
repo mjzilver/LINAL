@@ -1,5 +1,4 @@
 #include "WorldObject.h"
-#include <iostream>
 
 Vector WorldObject::get_center()
 {

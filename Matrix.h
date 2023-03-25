@@ -2,12 +2,12 @@
 #include <vector>
 #include "Vector.h"
 #include "WorldObject.h"
-#define PI 3.14159265
+#define PI 3.14159265358979323846f  
 
 class Matrix
 {
 public:
-	Matrix() {};
+	Matrix() : _rows(0), _columns(0) {};
 	Matrix(int rows, int columns);
 	Matrix(WorldObject object);
 	void setValues(std::vector<float> values);
@@ -28,7 +28,6 @@ public:
 	Matrix translate(WorldObject object, float deltaX, float deltaY, float deltaZ);
 	Matrix translate(float deltaX, float deltaY, float deltaZ);
 	Matrix scale(WorldObject object, float scaleX, float scaleY, float scaleZ);
-	Matrix rotate(WorldObject object, Vector rotationPoint, int degrees);
 
 	Matrix getRelative(Vector source);
 	Matrix getAbsolute(Vector source);
@@ -43,6 +42,6 @@ public:
 private:
 	int _rows;
 	int _columns;
-	float matrix[4][25];
+	float matrix[4][25] = {0};
 };
 

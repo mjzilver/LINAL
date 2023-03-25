@@ -1,5 +1,4 @@
 #include "Render.h"
-#include "Vector.h"
 
 #include <SDL.h>
 #undef main
@@ -17,6 +16,17 @@ Render::Render()
 
 	SDL_SetWindowTitle(this->_window, _name);
 }
+
+void Render::Draw() const {
+	SDL_RenderPresent(this->_renderer);
+}
+
+void Render::Clear() const {
+	// Black background
+	SDL_SetRenderDrawColor(this->_renderer, 0, 0, 0, 0);
+	SDL_RenderClear(this->_renderer);
+}
+
 
 void Render::DrawLine(float x, float y, float x2, float y2, int r, int g, int b) const
 {
@@ -39,17 +49,6 @@ void Render::DrawLine(Vector v1, Vector v2, Camera cam, int red, int green, int 
 	if (a.getW() >= 1 && b.getW() >= 1) {
 		DrawLine(a.getX(), a.getY(), b.getX(), b.getY(), red, green, blue);
 	}
-}
-
-
-void Render::Draw() const {
-	SDL_RenderPresent(this->_renderer);	
-}
-
-void Render::Clear() const {
-	// Black background
-	SDL_SetRenderDrawColor(this->_renderer, 0, 0, 0, 0);
-	SDL_RenderClear(this->_renderer);
 }
 
 void Render::DrawObject(WorldObject & object, Camera cam)

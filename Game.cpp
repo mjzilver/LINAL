@@ -1,16 +1,4 @@
-#include <iostream>
-#include <windows.h>
-#include <stdlib.h>
-#include <algorithm>
-#include <SDL.h>
-
 #include "Game.h"
-#include "Render.h"
-#include "Matrix.h"
-#include "Camera.h"
-#include "SpaceShip.h"
-#include "Target.h"
-#include "Bullet.h"
 
 #undef main
 
@@ -33,7 +21,7 @@ void Game::StartGameLoop()
 	targets.push_back(std::make_shared<Target>(Vector{ 400, 880, -100 }));
 	targets.push_back(std::make_shared<Target>(Vector{ 310, 10, -250 }));
 
-	MessageBox(HWND_DESKTOP, "Welcome to spaceship shooter 3D \n\nHere are the special controls\nX = toggle spaceship camera\nY = toggle stationary camera\n", "Welcome", MB_OK);
+	MessageBox(HWND_DESKTOP, "Welcome to spaceship shooter 3D by Jari Zilverentant \n\nHere are the special controls\nX = toggle spaceship camera\nY = toggle stationary camera\n", "Welcome", MB_OK);
 
 
 	while (gameLoop)

@@ -133,58 +133,6 @@ Matrix Matrix::scale(WorldObject object, float scaleX, float scaleY, float scale
 	return backToPosition * scale * toSource * objectMatrix;
 }
 
-Matrix Matrix::rotate(WorldObject object, Vector rotationPoint, int degrees)
-{
-	Matrix objectMatrix{ object };
-	Matrix M1{ 4,4 };
-	Matrix M2{ 4,4 };
-	Matrix M3{ 4,4 };
-	Matrix M4{ 4,4 };
-	Matrix M5{ 4,4 };
-	float radian = degrees * PI / 180.0;
-	//x delen door wortel van x2 + y2
-	float rotateXY1 = rotationPoint.getX() / std::sqrt(std::pow((float)rotationPoint.getX(), 2) + std::pow((float)rotationPoint.getZ(), 2));
-	//z delen door wortel van x2 + y2
-	float rotateXY2 = rotationPoint.getZ() / std::sqrt(std::pow((float)rotationPoint.getX(), 2) + std::pow((float)rotationPoint.getZ(), 2));
-	//y delen door wortel van x2 + y2 + z2
-	float rotateToX1 = rotationPoint.getY() / std::sqrt(std::pow((float)rotationPoint.getX(), 2) + std::pow((float)rotationPoint.getY(), 2) + std::pow((float)rotationPoint.getZ(), 2));
-	//wortel van x2 + z2 delen door wortel van x2 + y2 + z2
-	float rotateToX2 = std::sqrt(std::pow((float)rotationPoint.getX(), 2) + std::pow((float)rotationPoint.getZ(), 2)) / std::sqrt(std::pow((float)rotationPoint.getX(), 2) + std::pow((float)rotationPoint.getY(), 2) + std::pow((float)rotationPoint.getZ(), 2));
-
-	M5.setValues(std::vector<float>{
-		rotateXY1, 0, -rotateXY2, 0,
-		0, 1, 0, 0,
-		rotateXY2, 0, rotateXY1, 0,
-		0, 0, 0, 1
-	});
-	M4.setValues(std::vector<float>{
-		rotateToX2, -rotateToX1, 0, 0,
-		rotateToX1, rotateToX2, 0, 0,
-		0, 0, 1, 0,
-		0, 0, 0, 1
-	});
-	M3.setValues(std::vector<float>{
-		1, 0, 0, 0,
-		0, cos(radian), -sin(radian), 0,
-		0, sin(radian), cos(radian), 0,
-		0, 0, 0, 1
-	});
-	M2.setValues(std::vector<float>{
-		rotateToX2, rotateToX1, 0, 0,
-		-rotateToX1, rotateToX2, 0, 0,
-		0, 0, 1, 0,
-		0, 0, 0, 1
-	});
-	M1.setValues(std::vector<float>{
-		rotateXY1, 0, rotateXY2, 0,
-		0, 1, 0, 0,
-		-rotateXY2, 0, rotateXY1, 0,
-		0, 0, 0, 1
-	});
-
-	return M5 * M4 * M3 * M2 * M1 * objectMatrix;
-}
-
 void Matrix::print()
 {
 	std::cout << "This matrix has " << _rows << " rows and " << _columns << " columns" << std::endl;
@@ -197,7 +145,7 @@ void Matrix::print()
 // RotationX
 Matrix Matrix::pitch(float degrees)
 {
-	float radian = degrees * PI / 180.0;
+	float radian = degrees * PI / 180;
 	Matrix rotMat{ 4,4 };
 
 	rotMat.setValues(std::vector<float>{
@@ -212,7 +160,7 @@ Matrix Matrix::pitch(float degrees)
 // RotationY
 Matrix Matrix::yaw(float degrees)
 {
-	float radian = degrees * PI / 180.0;
+	float radian = degrees * PI / 180;
 	Matrix rotMat{ 4,4 };
 
 	rotMat.setValues(std::vector<float>{
@@ -227,7 +175,7 @@ Matrix Matrix::yaw(float degrees)
 // RotationZ
 Matrix Matrix::roll(float degrees)
 {
-	float radian = degrees * PI / 180.0;
+	float radian = degrees * PI / 180;
 	Matrix rotMat{ 4,4 };
 
 	rotMat.setValues(std::vector<float>{

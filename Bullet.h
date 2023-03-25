@@ -1,6 +1,7 @@
 #pragma once
 #include "WorldObject.h"
 #include "Matrix.h"
+
 class Bullet :
     public WorldObject
 {
@@ -9,7 +10,7 @@ public:
 
     float speed{ 1.5f };
     Vector force;
-    Matrix position = Matrix();
+    Matrix position;
 
     void update();
 };
