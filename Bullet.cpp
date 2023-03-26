@@ -5,29 +5,25 @@ Bullet::Bullet(Vector source, Vector force, float speed)
 	this->speed += speed;
 	_source = source;
 	this->force = force;
-	_points.push_back(_source);
-	Vector point1{source.getX() + force.getX() * 10,
-		source.getY() + force.getY() * 10,
-		source.getZ() + force.getZ() * 10};
+	_coords = source + force;
+
+	//_points.push_back(_source);
+	Vector point0 = force;
+	Vector point1 = force * 10;
+	_points.push_back(point0);
 	_points.push_back(point1);
 
 	_connections[0].push_back(&_points[1]);
 	position = Matrix(*this);
+	name = "bullet";
 }
 
 void Bullet::update()
 {
-	position = position.translate(
-		force.getX() * speed,
+	Matrix translationMatrix = Matrix::translate(force.getX() * speed,
 		force.getY() * speed,
-		force.getZ() * speed
-	) * position;
+		force.getZ() * speed);
 
-	for (int i = 0; i < position.get_columns(); i++)
-	{
-		_points.at(i).setX(position.getValue(0, i));
-		_points.at(i).setY(position.getValue(1, i));
-		_points.at(i).setZ(position.getValue(2, i));
-	}
+	_coords = translationMatrix.multiplyVector(_coords);
 }
 

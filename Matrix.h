@@ -25,8 +25,7 @@ public:
 	Matrix  operator*(const Matrix & other);
 	Matrix & operator*=(const Matrix & other);
 
-	Matrix translate(WorldObject object, float deltaX, float deltaY, float deltaZ);
-	Matrix translate(float deltaX, float deltaY, float deltaZ);
+	static Matrix translate(float deltaX, float deltaY, float deltaZ);
 	Matrix scale(WorldObject object, float scaleX, float scaleY, float scaleZ);
 
 	Matrix getRelative(Vector source);

@@ -23,7 +23,7 @@ BoundingBox WorldObject::generateBoundingBox()
 	BoundingBox bb = BoundingBox();
 	for (int i = 0; i < _points.size(); i++)
 	{
-        Vector& p = _points.at(i);
+		Vector p = get_absolute_point(i);
 
 		if (p.getX() < bb.minX || !bb.minXSet) {
 			bb.minX = p.getX();
@@ -33,7 +33,7 @@ BoundingBox WorldObject::generateBoundingBox()
 			bb.maxX = p.getX();
 			bb.maxXSet = true;
 		}
-       
+
 		if (p.getY() < bb.minY || !bb.minYSet) {
 			bb.minY = p.getY();
 			bb.minYSet = true;

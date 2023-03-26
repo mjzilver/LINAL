@@ -60,7 +60,7 @@ void Game::StartGameLoop()
 
 		render.DrawObject(*&ship, camera);
 		if (printHelperLine) {
-			Vector lineStart = ship.get_center();
+			Vector lineStart = ship.get_center() + ship.get_coordinates();
 			Vector lineEnd = lineStart + (ship.force * 1000);
 			render.DrawLine(lineStart, lineEnd, camera, 255, 0, 0);
 		}
@@ -116,7 +116,7 @@ void Game::StartGameLoop()
 
 		// space bar fires a bullet in the direction and speed of the shop
 		if (input.wasKeyReleased(SDL_SCANCODE_SPACE)) {
-			std::shared_ptr<Bullet> p = std::make_shared<Bullet>(ship.get_center(), ship.force, ship.speed);
+			std::shared_ptr<Bullet> p = std::make_shared<Bullet>(ship.get_center() + ship.get_coordinates(), ship.force, ship.speed);
 			bullets.push_back(p);
 			// if more than 20 bullets delete one :)
 			if (bullets.size() > 20) {
@@ -139,9 +139,9 @@ void Game::StartGameLoop()
 		// if the camera is locked the ship keep it moving along
 		if (!cameraIsStationary) {
 			if (cameraIsShip) {
-				camera.eye = ship.get_center();
+				camera.eye = ship.get_center() + ship.get_coordinates();
 			}
-			camera.lookat = ship.get_center() + (ship.force);
+			camera.lookat = ship.get_center() + ship.get_coordinates() + (ship.force);
 		}
 
 		// All update cycles under here

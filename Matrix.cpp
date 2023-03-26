@@ -108,14 +108,6 @@ Matrix & Matrix::operator*=(const Matrix & other)
 	return *this;
 }
 
-Matrix Matrix::translate(WorldObject object, float deltaX, float deltaY, float deltaZ)
-{
-	Matrix translation{4,4};
-	Matrix objectMatrix{object};
-	translation.setValues(std::vector<float>{1, 0, 0, deltaX, 0, 1, 0, deltaY, 0, 0, 1, deltaZ, 0, 0, 0, 1});
-	return translation * objectMatrix;
-}
-
 Matrix Matrix::translate(float deltaX, float deltaY, float deltaZ)
 {
 	Matrix translation{ 4,4 };
@@ -128,9 +120,7 @@ Matrix Matrix::scale(WorldObject object, float scaleX, float scaleY, float scale
 	Matrix scale{ 4,4 };
 	Matrix objectMatrix{object};
 	scale.setValues(std::vector<float>{scaleX, 0, 0, 0, 0, scaleY, 0, 0, 0, 0, scaleZ, 0, 0, 0, 0, 1});
-	Matrix toSource = translate(-object.get_source().getX(), -object.get_source().getY(), -object.get_source().getZ());
-	Matrix backToPosition = translate(object.get_source().getX(), object.get_source().getY(), object.get_source().getZ());
-	return backToPosition * scale * toSource * objectMatrix;
+	return scale;
 }
 
 void Matrix::print()

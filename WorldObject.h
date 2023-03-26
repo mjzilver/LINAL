@@ -38,12 +38,16 @@ public:
 	Vector get_source() { return _source; }
 	Vector get_center();
 	Vector get_point(int i) { return _points.at(i); }
+    Vector get_absolute_point(int i) { return _points.at(i) + _coords; }
+    Vector get_coordinates() { return _coords; }
 
     BoundingBox generateBoundingBox();
 protected:
 	std::map<int, std::vector<Vector*>> _connections;
 	std::vector<Vector> _points;
 	Vector _source;
+    Vector _coords;
     BoundingBox _boundingBox;
+    std::string name = "test";
 };
 

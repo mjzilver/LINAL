@@ -3,15 +3,15 @@
 Target::Target(Vector start)
 {
 	_source = start;
-	_points.push_back(_source);
-	Vector point1{ _source.getX() - 30,_source.getY() - 30,_source.getZ() };
-	Vector point2{ _source.getX() - 30,_source.getY() - 30,_source.getZ() - 30 };
-	Vector point3{ _source.getX() - 30,_source.getY() + 30,_source.getZ() };
-	Vector point4{ _source.getX() - 30,_source.getY() + 30,_source.getZ() - 30 };
-	Vector point5{ _source.getX() + 30,_source.getY() - 30,_source.getZ() };
-	Vector point6{ _source.getX() + 30,_source.getY() - 30,_source.getZ() - 30 };
-	Vector point7{ _source.getX() + 30,_source.getY() + 30,_source.getZ() };
-	Vector point8{ _source.getX() + 30,_source.getY() + 30,_source.getZ() - 30 };
+	_coords = _source;
+	Vector point1{ -30,-30,0 };
+	Vector point2{ -30,-30,-30 };
+	Vector point3{ -30,30,0 };
+	Vector point4{ -30,30,-30 };
+	Vector point5{ 30,-30,0 };
+	Vector point6{ 30,-30,- 30 };
+	Vector point7{ 30,30,0 };
+	Vector point8{ 30,30,-30 };
 
 	_points.push_back(point1);
 	_points.push_back(point2);
@@ -22,19 +22,20 @@ Target::Target(Vector start)
 	_points.push_back(point7);
 	_points.push_back(point8);
 
-	_connections[1].push_back(&_points[2]);
-	_connections[1].push_back(&_points[3]);
-	_connections[1].push_back(&_points[5]);
-	_connections[4].push_back(&_points[2]);
-	_connections[4].push_back(&_points[3]);
-	_connections[4].push_back(&_points[8]);
+	_connections[0].push_back(&_points[1]);
+	_connections[0].push_back(&_points[2]);
+	_connections[0].push_back(&_points[4]);
+	_connections[3].push_back(&_points[1]);
+	_connections[3].push_back(&_points[2]);
+	_connections[3].push_back(&_points[7]);
+	_connections[5].push_back(&_points[1]);
+	_connections[5].push_back(&_points[4]);
+	_connections[5].push_back(&_points[7]);
 	_connections[6].push_back(&_points[2]);
-	_connections[6].push_back(&_points[5]);
-	_connections[6].push_back(&_points[8]);
-	_connections[7].push_back(&_points[3]);
-	_connections[7].push_back(&_points[5]);
-	_connections[7].push_back(&_points[8]);
+	_connections[6].push_back(&_points[4]);
+	_connections[6].push_back(&_points[7]);
 	position = Matrix(*this);
+	name = "target";
 }
 
 void Target::update()
@@ -51,7 +52,7 @@ void Target::update()
 	else if (scale < 0.9995)
 		increasing = true;
 
-	position = position.scale(*this, scale, scale, scale);
+	position = position.scale(*this, scale, scale, scale) * position;
 	for (int i = 0; i < position.get_columns(); i++)
 	{
 		_points.at(i).setX(position.getValue(0, i));

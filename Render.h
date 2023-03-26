@@ -28,6 +28,7 @@ public:
 
 	// draw object with camera angels
 	void DrawObject(WorldObject &object, Camera cam);
+
 private:
 	SDL_Window* _window{};
 	SDL_Renderer* _renderer{};
